@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://texture/UI/target.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 9, 6 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 18, 0, 9, 6 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 27, 0, 9, 6 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 3 ), SubResource( 4 ), null ],
+"loop": false,
+"name": "main",
+"speed": 20.0
+} ]
+
+[node name="move_target_animation" type="AnimatedSprite"]
+frames = SubResource( 5 )
+animation = "main"
+frame = 3
+playing = true

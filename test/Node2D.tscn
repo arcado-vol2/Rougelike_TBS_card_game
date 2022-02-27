@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite" type="Sprite" parent="."]
+position = Vector2( 5.96046e-08, 0 )
+scale = Vector2( 0.131348, 0.115723 )
+texture = ExtResource( 1 )
