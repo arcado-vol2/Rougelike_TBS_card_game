@@ -13,16 +13,16 @@ onready var animation_player = $AnimationPlayer
 var selected = false
 var movment_target = Vector2.ZERO
 var velocity = Vector2.ZERO
-var speed = 70
 var target_max = 20
 
 #Переменные для битвы
 var attack_target = null
 var possible_targets = []
-
+var possible_targets_ignore_walls = []
 #Общие статы
+export var speed = 0
 export var health = 20
-var damage = 3
+export var damage = 3
 export var attack_range = 25
 
 #Дети
@@ -30,8 +30,8 @@ onready var state_machine = $Unite_SM
 onready var collision_shape = $CollisionShape2D
 onready var nav2d = get_node("../../Navigation2D")
 onready var rays = $Rays
-onready var ray_front = $Rays/ray_front
-onready var ray_front2 = $Rays/ray_front2
+onready var rays_front = [$Rays/ray_front, $Rays/ray_front2, $Rays/ray_front3]
+onready var attack_range_ray = $attack_range_ray
 onready var contoller = get_node("../..")
 onready var stop_timer = $stop_timer
 
@@ -43,7 +43,24 @@ var nav_path : PoolVector2Array
 var leg_reset_treshold = 19
 var movment_group = []
 
+	
+#Какой-то прикол годота
+var coll = 0
+#Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
+func _process(delta):
+
+	for tar in possible_targets_ignore_walls:
+		if coll>=5:
+			possible_targets.append(tar)
+			possible_targets_ignore_walls.erase(tar)
+			coll = 0
+		if !no_wall_between_target(tar):
+			coll += 1
+			
+			
+			
 func _ready():
+	#attack_range_ray.cast_to = Vector2(attack_range,0)
 	movment_target = position
 	#пока скорее для тестов
 	if unit_owner == 1:
@@ -101,17 +118,20 @@ func get_owner_id():
 
 
 func _obsticle_ahed() -> bool:
-	if ray_front.is_colliding():
-		if ray_front.get_collider().is_in_group("unit"):
-			if ray_front.get_collider().get_owner_id() != unit_owner:
-				return false
-	return ray_front.is_colliding() or ray_front2.is_colliding()
+	for ray in rays_front:
+		if ray.is_colliding():
+			return true
+	return false
 
 func _get_viable_ray() -> RayCast2D:
 	for ray in rays.get_children():
 		if !ray.is_colliding():
 			return ray
 	return null
+
+func no_wall_between_target(tar) -> bool:
+	attack_range_ray.cast_to = position.direction_to(tar.position) * position.distance_to(tar.position)
+	return attack_range_ray.is_colliding()
 
 func set_target(target):
 	stop_timer.stop()
@@ -134,12 +154,16 @@ func unselected():
 func _on_Vision_range_body_entered(body):
 	if body.is_in_group("unit"):
 		if body.unit_owner != unit_owner:
-			possible_targets.append(body)
+			possible_targets_ignore_walls.append(body)
+			#possible_targets.append(body)
 
 
 func _on_Vision_range_body_exited(body):
 	if possible_targets.has(body):
 		possible_targets.erase(body)
+		coll = 0
+	if possible_targets_ignore_walls.has(body):
+		possible_targets_ignore_walls.erase(body)
 
 
 func _compare_distance(target_a, target_b):

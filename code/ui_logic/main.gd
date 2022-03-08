@@ -18,6 +18,7 @@ func _ready():
 func _physics_process(delta):
 	calc_move(get_viewport().get_mouse_position(), delta)
 	
+	
 
 func _unhandled_input(event):
 	#Выделение юнитов

@@ -307,6 +307,12 @@ tracks/1/keys = {
 material = ExtResource( 5 )
 script = ExtResource( 3 )
 
+[node name="attack_range_ray" type="RayCast2D" parent="."]
+position = Vector2( 0, -5 )
+enabled = true
+cast_to = Vector2( 0, 2 )
+collision_mask = 4
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -5 )
 shape = SubResource( 3 )
@@ -352,43 +358,49 @@ anims/run_up = SubResource( 17 )
 
 [node name="Rays" type="Node2D" parent="."]
 
-[node name="ray_front" type="RayCast2D" parent="Rays"]
-rotation = 0.0872665
-enabled = true
-exclude_parent = false
-cast_to = Vector2( 50, 0 )
-collision_mask = 2
-
-[node name="ray_front2" type="RayCast2D" parent="Rays"]
-rotation = -0.0872665
-enabled = true
-exclude_parent = false
-cast_to = Vector2( 50, 0 )
-collision_mask = 2
-
 [node name="ray_right" type="RayCast2D" parent="Rays"]
-rotation = 0.523599
+rotation = 0.785398
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 50, 0 )
 collision_mask = 2
 
 [node name="ray_left" type="RayCast2D" parent="Rays"]
-rotation = -0.523599
+rotation = -0.785398
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 50, 0 )
 collision_mask = 2
 
 [node name="ray_right2" type="RayCast2D" parent="Rays"]
-rotation = 1.13446
+rotation = 1.309
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 50, 0 )
 collision_mask = 2
 
 [node name="ray_left2" type="RayCast2D" parent="Rays"]
-rotation = -1.13446
+rotation = -1.309
+enabled = true
+exclude_parent = false
+cast_to = Vector2( 50, 0 )
+collision_mask = 2
+
+[node name="ray_front" type="RayCast2D" parent="Rays"]
+enabled = true
+exclude_parent = false
+cast_to = Vector2( 50, 0 )
+collision_mask = 2
+
+[node name="ray_front2" type="RayCast2D" parent="Rays"]
+rotation = 0.279253
+enabled = true
+exclude_parent = false
+cast_to = Vector2( 50, 0 )
+collision_mask = 2
+
+[node name="ray_front3" type="RayCast2D" parent="Rays"]
+rotation = -0.279253
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 50, 0 )

@@ -1,5 +1,7 @@
 extends state_machine
 
+var comm_q_permit = false
+
 enum commands_list {
 	NONE,
 	MOVE,
@@ -27,13 +29,16 @@ func _ready():
 
 func _input(event):
 	if parent.selected and state != states.die:
+		if Input.is_action_just_pressed("command_queue_key"):
+			comm_q_permit = true
+		if Input.is_action_just_released("command_queue_key"):
+			comm_q_permit = false
+			
 		if Input.is_action_just_pressed("atack"):
 			command_mod = command_mod_list.ATTACK
 		if Input.is_action_just_pressed("hold"):
-			print("s")
 			command = commands_list.HOLD
-			set_state(states.idle)
-		if Input.is_action_just_released("right_click"):
+		if Input.is_action_just_released("right_click") and event is InputEventMouseButton:
 			parent.set_target(event.position  + parent.contoller.camera.position - parent.contoller.get_viewport_rect().size / 2)
 			set_state(states.move)
 			match command_mod:
@@ -83,6 +88,7 @@ func _enter_state(new_state, prev_state):
 		states.move:
 			parent.set_collision_layer_bit(1,false)
 		states.engage:
+			parent.set_target(parent.attack_target.get_ref().position)
 			parent.set_collision_layer_bit(1,false)
 		states.attack:
 			parent.set_collision_layer_bit(1,true)
