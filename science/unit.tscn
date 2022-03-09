@@ -410,6 +410,18 @@ collision_mask = 2
 wait_time = 0.4
 one_shot = true
 
+[node name="Label" type="Label" parent="."]
+margin_left = -22.0
+margin_top = -37.0
+margin_right = 18.0
+margin_bottom = -23.0
+
+[node name="Label2" type="Label" parent="."]
+margin_left = -22.0
+margin_top = 11.0
+margin_right = 18.0
+margin_bottom = 25.0
+
 [connection signal="body_entered" from="Vision_range" to="." method="_on_Vision_range_body_entered"]
 [connection signal="body_exited" from="Vision_range" to="." method="_on_Vision_range_body_exited"]
 [connection signal="animation_finished" from="AnimationPlayer" to="Unite_SM" method="_on_AnimationPlayer_animation_finished"]

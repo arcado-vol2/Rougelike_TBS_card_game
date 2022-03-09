@@ -12,6 +12,7 @@ onready var animation_player = $AnimationPlayer
 #Переменные для движения
 var selected = false
 var movment_target = Vector2.ZERO
+var last_movment_target = Vector2.ZERO
 var velocity = Vector2.ZERO
 var target_max = 20
 
@@ -48,7 +49,7 @@ var movment_group = []
 var coll = 0
 #Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
 func _process(delta):
-
+	
 	for tar in possible_targets_ignore_walls:
 		if coll>=5:
 			possible_targets.append(tar)
@@ -137,6 +138,7 @@ func set_target(target):
 	stop_timer.stop()
 	movment_group = contoller.get_movment_group()
 	nav_path = nav2d.get_simple_path(self.global_position, target, true)
+	last_movment_target = movment_target
 	movment_target = target
 	
 func recalculate_path():

@@ -1,6 +1,7 @@
 extends state_machine
 
 var comm_q_permit = false
+var command_queue = []
 
 enum commands_list {
 	NONE,
@@ -39,7 +40,14 @@ func _input(event):
 		if Input.is_action_just_pressed("hold"):
 			command = commands_list.HOLD
 		if Input.is_action_just_released("right_click") and event is InputEventMouseButton:
-			parent.set_target(event.position  + parent.contoller.camera.position - parent.contoller.get_viewport_rect().size / 2)
+			var t_pos = event.position  + parent.contoller.camera.position - parent.contoller.get_viewport_rect().size / 2
+			if comm_q_permit:
+				command_queue.push_back(t_pos)
+			else:
+				command_queue = [t_pos]
+			parent.set_target(command_queue[0])
+			
+			
 			set_state(states.move)
 			match command_mod:
 				command_mod_list.NONE:
@@ -83,8 +91,16 @@ func _state_logic(delta):
 func _enter_state(new_state, prev_state):
 	match state:
 		states.idle:
-			parent.set_collision_layer_bit(1,true)
-			parent.animation_player.play("idle_"+parent.directions[parent.cur_dir])
+			if command_queue.size()>1:
+				command_queue.remove(0)
+				parent.set_target(command_queue[0])
+				command = commands_list.MOVE
+				set_state(states.move)
+			else:
+
+				command_queue = []
+				parent.set_collision_layer_bit(1,true)
+				parent.animation_player.play("idle_"+parent.directions[parent.cur_dir])
 		states.move:
 			parent.set_collision_layer_bit(1,false)
 		states.engage:
@@ -108,6 +124,7 @@ func _get_transition(delta):
 						parent.attack_target = weakref(parent.closest_target_within_range())
 						set_state(states.attack)
 				commands_list.ATTACK:
+					parent.movment_target = parent.last_movment_target
 					parent.recalculate_path()
 					set_state(states.move)
 				commands_list.NONE:
@@ -115,19 +132,25 @@ func _get_transition(delta):
 						parent.attack_target = weakref(parent.closest_target())
 						set_state(states.engage)
 		states.move:
+			#if parent.position.distance_to(parent.movment_target) < parent.target_max:
+				#set_state(states.idle)
+			
+			
 			if command == commands_list.MOVE:
 				if parent.position.distance_to(parent.movment_target) < parent.target_max:
 					parent.movment_target = parent.position
-					set_state(states.idle)
 					command = commands_list.NONE
+					set_state(states.idle)
+					
 			if command == commands_list.ATTACK:
 				if parent.closest_target() != null:
 					parent.attack_target = weakref(parent.closest_target())
 					set_state(states.engage)
 				elif parent.position.distance_to(parent.movment_target) < parent.target_max:
 					parent.movment_target = parent.position
-					set_state(states.idle)
 					command = commands_list.NONE
+					set_state(states.idle)
+					
 				
 		states.engage:
 			if parent.closest_target_within_range() != null:
