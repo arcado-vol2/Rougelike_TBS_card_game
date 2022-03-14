@@ -27,7 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="RTS"
-run/main_scene="res://science/menu.tscn"
+run/main_scene="res://science/UI/menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

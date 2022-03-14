@@ -28,10 +28,10 @@ func GetTop():
 func GetBottom():
 	return bottom
 
-func Draw():
+func Draw(tiletp):
 	for x in range (left,right+1):
 		for y in range (bottom,top-1,-1):
-			find_parent("TileMap").set_cell(x,y,tile)
+			find_parent("TileMap").set_cell(x,y,tiletp)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
