@@ -1,6 +1,9 @@
 extends KinematicBody2D
 class_name unit
 
+#Константы
+const BOMB = preload("res://science/units/bomb.tscn")
+
 #Команда игрока для юнита
 export var unit_owner := 0
 
@@ -20,13 +23,17 @@ var target_max = 20
 var attack_target = null
 var possible_targets = []
 var possible_targets_ignore_walls = []
+
 #Общие статы
 export var speed = 0
-export var health = 20
+export var max_health = 20
+var health = max_health
 export var damage = 3
 export var attack_range = 25
-
+var ability_range = [50, 1]
+var ability_index = 0
 #Дети
+onready var abilities_timer = $Abilities.get_children()
 onready var state_machine = $Unite_SM
 onready var collision_shape = $CollisionShape2D
 onready var nav2d = get_node("../../Navigation2D")
@@ -34,6 +41,7 @@ onready var rays = $Rays
 onready var rays_front = [$Rays/ray_front, $Rays/ray_front2, $Rays/ray_front3]
 onready var attack_range_ray = $attack_range_ray
 onready var contoller = get_node("../..")
+onready var hud = get_node("../../Camera2D/hud")
 onready var stop_timer = $stop_timer
 
 #Материалы
@@ -49,6 +57,10 @@ var movment_group = []
 var coll = 0
 #Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
 func _process(delta):
+	$Label.text = str(state_machine.command_mod) + " " + str(state_machine.command)
+	for i in abilities_timer.size():
+		if abilities_timer[i].time_left != 0:
+			hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
 	
 	for tar in possible_targets_ignore_walls:
 		if coll>=5:
@@ -138,13 +150,18 @@ func set_target(target):
 	stop_timer.stop()
 	movment_group = contoller.get_movment_group()
 	nav_path = nav2d.get_simple_path(self.global_position, target, true)
+	nav_path.remove(0)
 	last_movment_target = movment_target
 	movment_target = target
+	print(movment_target)
 	
 func recalculate_path():
 	nav_path = nav2d.get_simple_path(self.global_position, movment_target, true)
 
 func selected():
+	for i in abilities_timer.size():
+		print(abilities_timer[i].time_left)
+		hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
 	selected = true
 	$Selected.visible = true
 
@@ -157,7 +174,6 @@ func _on_Vision_range_body_entered(body):
 	if body.is_in_group("unit"):
 		if body.unit_owner != unit_owner:
 			possible_targets_ignore_walls.append(body)
-			#possible_targets.append(body)
 
 
 func _on_Vision_range_body_exited(body):
@@ -203,3 +219,21 @@ func take_damage(amount) -> bool:
 	return true
 	
 
+
+func use_ability(index):
+	ability_index = index
+	match index:
+		0:
+			if abilities_timer[index].is_stopped():
+				var bomb = BOMB.instance()
+				bomb.position = last_movment_target
+				get_tree().current_scene.add_child(bomb)
+				abilities_timer[index].start()
+				
+		1:
+			if abilities_timer[index].is_stopped():
+				health += 10
+				if health > max_health:
+					health = max_health
+				abilities_timer[index].start()
+				

@@ -3,18 +3,21 @@ extends state_machine
 var comm_q_permit = false
 var command_queue = []
 
+
 enum commands_list {
 	NONE,
 	MOVE,
 	ATTACK,
-	HOLD
+	HOLD,
+	ABILITY
 }
 var command = commands_list.NONE
 
 
 enum command_mod_list {
 	NONE,
-	ATTACK
+	ATTACK,
+	ABILITY
 }
 var command_mod = command_mod_list.NONE
 
@@ -30,11 +33,18 @@ func _ready():
 
 func _input(event):
 	if parent.selected and state != states.die:
+		if Input.is_action_just_pressed("1_ability"):
+			if command_mod != command_mod_list.ABILITY:
+				command_mod = command_mod_list.ABILITY
+				parent.ability_index = 0
+			else:
+				command_mod = command_mod_list.NONE
+		if Input.is_action_just_pressed("2_ability"):
+			parent.use_ability(1)
 		if Input.is_action_just_pressed("command_queue_key"):
 			comm_q_permit = true
 		if Input.is_action_just_released("command_queue_key"):
 			comm_q_permit = false
-			
 		if Input.is_action_just_pressed("atack"):
 			command_mod = command_mod_list.ATTACK
 		if Input.is_action_just_pressed("hold"):
@@ -47,13 +57,15 @@ func _input(event):
 				command_queue = [t_pos]
 			parent.set_target(command_queue[0])
 			
-			
 			set_state(states.move)
 			match command_mod:
 				command_mod_list.NONE:
 					command = commands_list.MOVE
 				command_mod_list.ATTACK:
 					command = commands_list.ATTACK
+				command_mod_list.ABILITY:
+					print(132)
+					command = commands_list.ABILITY
 			
 			
 
@@ -73,31 +85,33 @@ func _state_logic(delta):
 		states.idle:
 			pass
 		states.move:
-			change_dir()
 			parent.animation_player.play("run_"+parent.directions[parent.cur_dir])
 			parent.move_along_path(delta)
 		states.engage:
-			change_dir()
+			
 			parent.animation_player.play("run_"+parent.directions[parent.cur_dir])
 			if parent.attack_target.get_ref():
 				parent.move_to_target(delta, parent.attack_target.get_ref().position)
 			else:
 				set_state(states.idle)
 		states.attack:
-			change_dir()
+			pass
 		states.die:
 			pass
 
 func _enter_state(new_state, prev_state):
 	match state:
 		states.idle:
+			if command == commands_list.ABILITY:
+				parent.use_ability(parent.ability_index)
+				command_mod = command_mod_list.NONE
+				command = commands_list.NONE
 			if command_queue.size()>1:
 				command_queue.remove(0)
 				parent.set_target(command_queue[0])
 				command = commands_list.MOVE
 				set_state(states.move)
 			else:
-
 				command_queue = []
 				parent.set_collision_layer_bit(1,true)
 				parent.animation_player.play("idle_"+parent.directions[parent.cur_dir])
@@ -116,6 +130,7 @@ func _enter_state(new_state, prev_state):
 	
 	
 func _get_transition(delta):
+	change_dir()
 	match state:
 		states.idle:
 			match command:
@@ -134,21 +149,28 @@ func _get_transition(delta):
 		states.move:
 			#if parent.position.distance_to(parent.movment_target) < parent.target_max:
 				#set_state(states.idle)
-			
-			
-			if command == commands_list.MOVE:
-				if parent.position.distance_to(parent.movment_target) < parent.target_max:
-					parent.movment_target = parent.position
-					command = commands_list.NONE
-					set_state(states.idle)
-					
-			if command == commands_list.ATTACK:
-				if parent.closest_target() != null:
-					parent.attack_target = weakref(parent.closest_target())
-					set_state(states.engage)
-				elif parent.position.distance_to(parent.movment_target) < parent.target_max:
-					parent.movment_target = parent.position
-					command = commands_list.NONE
+			match command:
+				
+				commands_list.MOVE:
+					if parent.position.distance_to(parent.movment_target) < parent.target_max:
+						parent.set_target(parent.position)
+						command = commands_list.NONE
+						set_state(states.idle)
+				commands_list.ABILITY:
+					if parent.position.distance_to(parent.movment_target) < parent.ability_range[parent.ability_index]:
+						parent.set_target(parent.position)
+						#command = commands_list.NONE
+						set_state(states.idle)
+				
+				commands_list.ATTACK:
+					if parent.closest_target() != null:
+						parent.attack_target = weakref(parent.closest_target())
+						set_state(states.engage)
+					elif parent.position.distance_to(parent.movment_target) < parent.target_max:
+						parent.set_target(parent.position)
+						command = commands_list.NONE
+						set_state(states.idle)
+				commands_list.HOLD:
 					set_state(states.idle)
 					
 				
@@ -197,4 +219,4 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 func _on_stop_timer_timeout():
 	if state != states.die:
 		set_state(states.idle)
-		parent.movment_target = parent.position
+		parent.set_target(parent.position)

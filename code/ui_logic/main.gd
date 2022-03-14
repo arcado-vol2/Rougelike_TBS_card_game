@@ -9,6 +9,7 @@ var position_dep_cam = Vector2.ZERO
 onready var select_draw = $Select_Draw
 onready var camera = $Camera2D
 onready var pointer = $move_target_animation
+onready var hud = $Camera2D/hud
 
 const CAMERA_MOVE_SPEED = 10
 const CAMERA_MOVE_MARGIN = 20
@@ -31,6 +32,8 @@ func _unhandled_input(event):
 		
 		#print(event.position, " event")
 		if event.pressed:
+			if selected_units.size() >0:
+				hud.update_label("ПИЗДА СЛОНА")
 			for unit in weakref_selected:
 				if unit.get_ref():
 					if unit.get_ref().is_in_group("unit"):
@@ -53,6 +56,8 @@ func _unhandled_input(event):
 				if unit.collider.is_in_group("unit") and unit.collider.unit_owner == 0:
 					unit.collider.selected()
 					weakref_selected.append(weakref(unit.collider))
+			if selected_units.size() >0:
+				hud.update_label(selected_units[0].collider.name)
 	if dragging:
 		if event is InputEventMouseMotion:
 			select_draw.update_status(drag_start_position, position_dep_cam, dragging)
