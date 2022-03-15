@@ -58,10 +58,12 @@ var coll = 0
 #Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
 func _process(delta):
 	$Label.text = str(state_machine.command_mod) + " " + str(state_machine.command)
+	#Вызывваем апдейт анимаций кнопок скилов в худе, РОМА, ТЫ ПОНЯЛ?
 	for i in abilities_timer.size():
 		if abilities_timer[i].time_left != 0:
 			hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
-	
+	#Проверяем столкновения со стенами относительно всех возможных противноиков
+	#И добавляем их в доступных противников, если стен нету. РОМА, ТЫ ПОНЯЛ? 
 	for tar in possible_targets_ignore_walls:
 		if coll>=5:
 			possible_targets.append(tar)
@@ -81,12 +83,15 @@ func _ready():
 	
 
 
-#Движение
+#---------Движение----------
+
+#Основная функция движения
 func move_to_target(delta, tar):
 	velocity = Vector2.ZERO
 	velocity = position.direction_to(tar) * speed
 	move_with_avoidance()
 
+#Движение по пути построенному в виде точкек в массиве.
 func move_along_path(delta):
 	if nav_path.size() > 0:
 		var distance_to_next_point = position.distance_to(nav_path[0])
@@ -99,7 +104,7 @@ func move_along_path(delta):
 			velocity = position.direction_to(nav_path[0]) * speed
 			move_with_avoidance()
 		colliders_reaching_targets()
-
+#Корректирование траектории, если встречаем стены
 func move_with_avoidance():
 	rays.rotation_degrees = velocity.angle() * 180/PI
 	if _obsticle_ahed():
@@ -108,7 +113,7 @@ func move_with_avoidance():
 			velocity = Vector2.RIGHT.rotated((rays.rotation_degrees  +  viable_ray.rotation_degrees) * PI/180 ) * speed
 	move_and_slide(velocity)
 	
-
+#Функция, похволяющая юнитам собиратся максимально возможно в одной точке
 func colliders_reaching_targets():
 	if stop_timer.is_stopped():
 		for i in get_slide_count():
@@ -117,35 +122,36 @@ func colliders_reaching_targets():
 				if unit.get_ref() and unit.get_ref() == collider:
 					if collider.reached_target():
 						stop_timer.start()
-
+#Шиз, тебе здесь нужны комментарии?
 func reached_target() -> bool:
 	return movment_target == position
-
+#Тут тоже всё очевидно, просто функция для сравнивания углов векторов
 func _compare_angle(ray_a, ray_b):
 	if abs(ray_a.rotation_degrees) > abs(ray_b.rotation_degrees):
 		return true
 	return false
-
+#А чтоже делает эта функция???????
 func get_owner_id():
 	return unit_owner
 
-
+#Проверяем если препятствия впереди 
 func _obsticle_ahed() -> bool:
 	for ray in rays_front:
 		if ray.is_colliding():
 			return true
 	return false
-
+#Ищем луч, который не сталкивается со стенами, чтобы пойти туда
 func _get_viable_ray() -> RayCast2D:
 	for ray in rays.get_children():
 		if !ray.is_colliding():
 			return ray
 	return null
-
+#Банально чекаем есть ли между нами и целью стена
 func no_wall_between_target(tar) -> bool:
 	attack_range_ray.cast_to = position.direction_to(tar.position) * position.distance_to(tar.position)
 	return attack_range_ray.is_colliding()
 
+#Функция обновления цели
 func set_target(target):
 	stop_timer.stop()
 	movment_group = contoller.get_movment_group()
@@ -154,28 +160,30 @@ func set_target(target):
 	last_movment_target = movment_target
 	movment_target = target
 	print(movment_target)
-	
+#А это, что делает? Без понятия...
 func recalculate_path():
 	nav_path = nav2d.get_simple_path(self.global_position, movment_target, true)
 
+#Меняем статус "выбраности" юнита
 func selected():
+	#Обнуляем текстурки таймеров абилок
 	for i in abilities_timer.size():
 		print(abilities_timer[i].time_left)
 		hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
 	selected = true
 	$Selected.visible = true
-
+#Меняем статус "выбраности" юнита
 func unselected():
 	selected = false
 	$Selected.visible = false
 
-
+#Добавляем тело, если оно в поле зрения, в доступные цели, игнорируя стены
 func _on_Vision_range_body_entered(body):
 	if body.is_in_group("unit"):
 		if body.unit_owner != unit_owner:
 			possible_targets_ignore_walls.append(body)
 
-
+#Убираем тело, если оно вышло из поля зрения, из доступных целей, в принципе
 func _on_Vision_range_body_exited(body):
 	if possible_targets.has(body):
 		possible_targets.erase(body)
@@ -183,33 +191,33 @@ func _on_Vision_range_body_exited(body):
 	if possible_targets_ignore_walls.has(body):
 		possible_targets_ignore_walls.erase(body)
 
-
+#Функция сравнения расстояний между точками (нужна для сортировки)
 func _compare_distance(target_a, target_b):
 	if position.distance_to(target_a.position) < position.distance_to(target_b.position):
 		return true
 	return false
 	
-
-	
-
+#Получаем ближайщую цель
 func closest_target() -> unit:
 	if possible_targets.size() > 0:
 		possible_targets.sort_custom(self, "_compare_distance")
 		return possible_targets[0]
 	return null
-
+#Проверяем есть ли она в дистанции атаки
 func closest_target_within_range() -> unit:
 	if closest_target() != null:
 		if closest_target().position.distance_to(position) < attack_range:
 			return closest_target()
 	return null
-	
+#Получем эту цель
 func target_within_range() -> bool:
 	if attack_target != null:
 		if attack_target.get_ref().position.distance_to(position) < attack_range:
 			return true
 	return false
-	
+#Рома, ты понял, что прошлые 3 коммента связаны???
+
+#Функция получения урона и проверки дохлости юнита
 func take_damage(amount) -> bool:
 	health -= amount
 	if health <= 0:
@@ -220,10 +228,66 @@ func take_damage(amount) -> bool:
 	
 
 
+
+																									
+ #РОМА, СМОТРИ ЭТО ЖЕ ФУНКЦИЯ АБИЛОК!!!!!!!!                                                                                                   
+																									
+																									
+#                                            (@@@@*   ((@@@@(,                                       
+#                                       (@@&.                  (@@%                                  
+#                                  %@@@                             @@                               
+#                                @@                                  @@                              
+#                              @*                  *@@@@/     *@%    (@                             
+#                             *@&        .@@@&&     *@@@&              @(                            
+#                            %@   *@@@%%.,&@@@@@%,,,@@@@@%             @@                            
+#                            @   @@@@&#***@@@@@#                        @                            
+#                           *@     ((                 ,@@(((((   .@     @                            
+#                           *@                                          @#                           
+#                            @       &@@@@@@@@        .@                /@                           
+#                            &%   @(      &%  (      % #&@@@ @.          @                           
+#                             @,     /@@@@@@* (   *.  @@@@@@             @#                          
+#                             @@     @@@@@@ @%(.   @                     @#                          
+#                              @               @   @.                    @#                          
+#       @@@.                   %@              @     @,                  @#                          
+#       @#  (@@@@@@(.           @*            (@      @*                 @#                          
+#         *@#        /@@@@@#/   /@           ./       .@                ,@#                          
+#          @,                 ,@@@            .,@@.                    @@ @%                         
+#         @@                      @@              *. @,&            @ (@@  .@@@*                     
+#        #@  /@@                   (@       #&  /  @  % @ @        &@ @@ @      @@@@@                
+#                @@&                 /@   .@  (@@@@@@@@@@/   @.  @@%#@@                              
+#                   @@(                @.@  , @@@@@@@@@@@@   *@ @ %@@ %                              
+#                     *@@              %@**@   @@@@@@@@@(@       %@&&@                               
+#                        @@(            &@@@.   @      &&       /@#@                                 
+#                           @@#           @(@@     ***         @@                                    
+#                              @@            @@@*@           @@ %                                    
+#                               ,@@           (  @/@@@@@@@@@. .                                      
+#                                  @@(            *@ @  @   @                                        
+#                                    /@#                                                             
+#                                      @@.                                                           
+#                                       &%                                                           
+#                                       &%                                                           
+#                                        @                                                           
+#                                        @@                                                          
+#                                         @%                                                         
+#                                          @                                                         
+#                                          @*                                                        
+#                                          ,@                                                        
+#                                           /@                                                       
+#                                            @                                                       
+#                                            @/                                                      
+#                                            *@                                                      
+#                                            .@                                                      
+#                                            .@                                                      
+#                                             @                                                      
+#                                              @(                                                    
+#                                              @(                                                    
+
+
 func use_ability(index):
 	ability_index = index
 	match index:
 		0:
+			#Логика бомбы
 			if abilities_timer[index].is_stopped():
 				var bomb = BOMB.instance()
 				bomb.position = last_movment_target
@@ -231,6 +295,7 @@ func use_ability(index):
 				abilities_timer[index].start()
 				
 		1:
+			#Логика хилки
 			if abilities_timer[index].is_stopped():
 				health += 10
 				if health > max_health:

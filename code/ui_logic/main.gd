@@ -1,3 +1,4 @@
+#Короче, тут код выделения юнитов и контроля камерой
 extends Node2D
 var dragging = false
 var selected_units = []
@@ -25,9 +26,6 @@ func _unhandled_input(event):
 	#Выделение юнитов
 	if event is InputEventMouseMotion:
 		position_dep_cam  = event.position  + camera.position - get_viewport_rect().size / 2
-	
-	
-	
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		
 		#print(event.position, " event")
@@ -67,7 +65,7 @@ func _unhandled_input(event):
 		
 func get_movment_group():
 	return weakref_selected
-	
+#контроль камеры	
 func calc_move(mouse_pos, delta):
 	var viewport_size = get_viewport_rect().size
 	var move_vector = Vector2.ZERO
@@ -80,3 +78,4 @@ func calc_move(mouse_pos, delta):
 	if mouse_pos.y > viewport_size.y - CAMERA_MOVE_MARGIN:
 		move_vector.y += 1
 	camera.position += move_vector*CAMERA_MOVE_SPEED
+#Всё
