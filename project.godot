@@ -33,6 +33,7 @@ config/icon="res://icon.png"
 [autoload]
 
 room="*res://code/world_logic/room.gd"
+UNIT_GLOBAL="*res://code/unit_logic/global_unit.gd"
 
 [display]
 

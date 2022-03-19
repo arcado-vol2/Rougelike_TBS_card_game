@@ -31,6 +31,7 @@ collision_layer = 6
 
 [node name="Unit2" parent="YSort" instance=ExtResource( 3 )]
 position = Vector2( 159, 147 )
+unit_name = "Bines"
 speed = 400
 
 [node name="Select_Draw" type="Node2D" parent="."]

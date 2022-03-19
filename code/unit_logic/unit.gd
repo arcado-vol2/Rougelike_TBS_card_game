@@ -25,9 +25,12 @@ var possible_targets = []
 var possible_targets_ignore_walls = []
 
 #Общие статы
+export var unit_name = ""
 export var speed = 0
 export var max_health = 20
 var health = max_health
+export var max_mana = 50
+var mana = max_mana
 export var damage = 3
 export var attack_range = 25
 var ability_range = [50, 1]
@@ -167,6 +170,7 @@ func recalculate_path():
 #Меняем статус "выбраности" юнита
 func selected():
 	#Обнуляем текстурки таймеров абилок
+	update_stats()
 	for i in abilities_timer.size():
 		print(abilities_timer[i].time_left)
 		hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
@@ -174,6 +178,7 @@ func selected():
 	$Selected.visible = true
 #Меняем статус "выбраности" юнита
 func unselected():
+	UNIT_GLOBAL.remove_unit(unit_name)
 	selected = false
 	$Selected.visible = false
 
@@ -219,6 +224,7 @@ func target_within_range() -> bool:
 
 #Функция получения урона и проверки дохлости юнита
 func take_damage(amount) -> bool:
+	update_stats()
 	health -= amount
 	if health <= 0:
 		state_machine.died()
@@ -226,7 +232,12 @@ func take_damage(amount) -> bool:
 		return false
 	return true
 	
-
+func update_stats():
+	UNIT_GLOBAL.add_unit(unit_name, {
+		"health": health,
+		"damage": damage,
+		"mana": mana
+	})
 
 
 																									
