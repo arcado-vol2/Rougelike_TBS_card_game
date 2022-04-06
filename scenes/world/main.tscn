@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://science/effects/move_target_animation.tscn" type="PackedScene" id=1]
-[ext_resource path="res://science/UI/hud.tscn" type="PackedScene" id=2]
-[ext_resource path="res://science/units/unit.tscn" type="PackedScene" id=3]
-[ext_resource path="res://science/world/map.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/effects/move_target_animation.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/UI/hud.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/units/unit.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/world/map.tscn" type="PackedScene" id=4]
 [ext_resource path="res://code/ui_logic/main.gd" type="Script" id=5]
 [ext_resource path="res://code/ui_logic/select_draw.gd" type="Script" id=6]
 
@@ -31,8 +31,6 @@ collision_layer = 6
 
 [node name="Unit2" parent="YSort" instance=ExtResource( 3 )]
 position = Vector2( 159, 147 )
-unit_name = "Bines"
-speed = 400
 
 [node name="Select_Draw" type="Node2D" parent="."]
 position = Vector2( 1, 2 )

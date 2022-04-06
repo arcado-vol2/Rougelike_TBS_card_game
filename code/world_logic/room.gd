@@ -6,6 +6,8 @@ var top
 var bottom
 var tile
 
+
+
 func GetWidth():
 	return right-left+1
 
@@ -18,7 +20,6 @@ func _init(a,b,c,d,e):
 	top=c
 	bottom=d
 	tile=e
-
 func GetLeft():
 	return left
 func GetRight():
@@ -28,15 +29,20 @@ func GetTop():
 func GetBottom():
 	return bottom
 
+
+
 func Draw(tiletp):
+	#var prefabs = find_parent("TileMap").get_prefabs()
+	var size = Vector2(right - left + 1 ,bottom - top + 1)
+	
+	var tmp = Label.new()
+	tmp.text = str(size)
+	tmp.margin_left = left*32
+	tmp.margin_top = top*32
+	
+	find_parent("TileMap").add_child(tmp)
 	for x in range (left,right+1):
 		for y in range (bottom,top-1,-1):
 			find_parent("TileMap").set_cell(x,y,tiletp)
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+	
+	

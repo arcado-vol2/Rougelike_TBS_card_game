@@ -52,7 +52,8 @@ func iterate(iternum): #Итерации
 			for y in range(1,bottom-top):
 				noise[x][y]=wrlmap[x][y]
 
-func neighwalls(x,y):#количество стен соседей
+func neighwalls(x,y
+):#количество стен соседей
 	var count=0
 	if noise[x-1][y]==1:
 		count+=1

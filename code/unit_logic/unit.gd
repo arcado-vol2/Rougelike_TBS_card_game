@@ -2,7 +2,7 @@ extends KinematicBody2D
 class_name unit
 
 #Константы
-const BOMB = preload("res://science/units/bomb.tscn")
+const BOMB = preload("res://scenes/units/bomb.tscn")
 
 #Команда игрока для юнита
 export var unit_owner := 0
@@ -23,18 +23,11 @@ var target_max = 20
 var attack_target = null
 var possible_targets = []
 var possible_targets_ignore_walls = []
-
 #Общие статы
-export var unit_name = ""
-export var speed = 0
-export var max_health = 20
-var health = max_health
-export var max_mana = 50
-var mana = max_mana
-export var damage = 3
-export var attack_range = 25
+onready var stats = $stats
 var ability_range = [50, 1]
 var ability_index = 0
+
 #Дети
 onready var abilities_timer = $Abilities.get_children()
 onready var state_machine = $Unite_SM
@@ -55,12 +48,19 @@ var nav_path : PoolVector2Array
 var leg_reset_treshold = 19
 var movment_group = []
 
+
+
+
+
+
+
 	
 #Какой-то прикол годота
 var coll = 0
 #Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
 func _process(delta):
-	$Label.text = str(state_machine.command_mod) + " " + str(state_machine.command)
+	
+	
 	#Вызывваем апдейт анимаций кнопок скилов в худе, РОМА, ТЫ ПОНЯЛ?
 	for i in abilities_timer.size():
 		if abilities_timer[i].time_left != 0:
@@ -78,6 +78,10 @@ func _process(delta):
 			
 			
 func _ready():
+	
+	
+	
+	
 	#attack_range_ray.cast_to = Vector2(attack_range,0)
 	movment_target = position
 	#пока скорее для тестов
@@ -91,7 +95,7 @@ func _ready():
 #Основная функция движения
 func move_to_target(delta, tar):
 	velocity = Vector2.ZERO
-	velocity = position.direction_to(tar) * speed
+	velocity = position.direction_to(tar) * stats.speed
 	move_with_avoidance()
 
 #Движение по пути построенному в виде точкек в массиве.
@@ -101,10 +105,10 @@ func move_along_path(delta):
 		if distance_to_next_point < leg_reset_treshold:
 			nav_path.remove(0)
 			if nav_path.size() != 0:
-				velocity = position.direction_to(nav_path[0]) * speed
+				velocity = position.direction_to(nav_path[0]) * stats.speed
 				move_with_avoidance()
 		else:
-			velocity = position.direction_to(nav_path[0]) * speed
+			velocity = position.direction_to(nav_path[0]) * stats.speed
 			move_with_avoidance()
 		colliders_reaching_targets()
 #Корректирование траектории, если встречаем стены
@@ -113,7 +117,7 @@ func move_with_avoidance():
 	if _obsticle_ahed():
 		var viable_ray = _get_viable_ray()
 		if viable_ray:
-			velocity = Vector2.RIGHT.rotated((rays.rotation_degrees  +  viable_ray.rotation_degrees) * PI/180 ) * speed
+			velocity = Vector2.RIGHT.rotated((rays.rotation_degrees  +  viable_ray.rotation_degrees) * PI/180 ) * stats.speed
 	move_and_slide(velocity)
 	
 #Функция, похволяющая юнитам собиратся максимально возможно в одной точке
@@ -145,6 +149,7 @@ func _obsticle_ahed() -> bool:
 	return false
 #Ищем луч, который не сталкивается со стенами, чтобы пойти туда
 func _get_viable_ray() -> RayCast2D:
+	var possible_rays = []
 	for ray in rays.get_children():
 		if !ray.is_colliding():
 			return ray
@@ -162,7 +167,6 @@ func set_target(target):
 	nav_path.remove(0)
 	last_movment_target = movment_target
 	movment_target = target
-	print(movment_target)
 #А это, что делает? Без понятия...
 func recalculate_path():
 	nav_path = nav2d.get_simple_path(self.global_position, movment_target, true)
@@ -172,13 +176,12 @@ func selected():
 	#Обнуляем текстурки таймеров абилок
 	update_stats()
 	for i in abilities_timer.size():
-		print(abilities_timer[i].time_left)
 		hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
 	selected = true
 	$Selected.visible = true
 #Меняем статус "выбраности" юнита
 func unselected():
-	UNIT_GLOBAL.remove_unit(unit_name)
+	Unit_global.remove_unit(stats.unit_name)
 	selected = false
 	$Selected.visible = false
 
@@ -211,13 +214,13 @@ func closest_target() -> unit:
 #Проверяем есть ли она в дистанции атаки
 func closest_target_within_range() -> unit:
 	if closest_target() != null:
-		if closest_target().position.distance_to(position) < attack_range:
+		if closest_target().position.distance_to(position) < stats.attack_range:
 			return closest_target()
 	return null
 #Получем эту цель
 func target_within_range() -> bool:
 	if attack_target != null:
-		if attack_target.get_ref().position.distance_to(position) < attack_range:
+		if attack_target.get_ref().position.distance_to(position) < stats.attack_range:
 			return true
 	return false
 #Рома, ты понял, что прошлые 3 коммента связаны???
@@ -225,18 +228,18 @@ func target_within_range() -> bool:
 #Функция получения урона и проверки дохлости юнита
 func take_damage(amount) -> bool:
 	update_stats()
-	health -= amount
-	if health <= 0:
+	stats.health -= amount
+	if stats.health <= 0:
 		state_machine.died()
 		collision_shape.disabled = true
 		return false
 	return true
 	
 func update_stats():
-	UNIT_GLOBAL.add_unit(unit_name, {
-		"health": health,
-		"damage": damage,
-		"mana": mana
+	Unit_global.add_unit(stats.unit_name, {
+		"health": stats.health,
+		"damage": stats.damage,
+		"mana": stats.mana
 	})
 
 
@@ -308,8 +311,8 @@ func use_ability(index):
 		1:
 			#Логика хилки
 			if abilities_timer[index].is_stopped():
-				health += 10
-				if health > max_health:
-					health = max_health
+				stats.health += 10
+				if stats.health > stats.max_health:
+					stats.health = stats.max_health
 				abilities_timer[index].start()
 				

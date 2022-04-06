@@ -18,7 +18,6 @@ const CAMERA_MOVE_MARGIN = 20
 func _ready():
 	camera.position = get_viewport_rect().size / 2
 func _physics_process(delta):
-	print(UNIT_GLOBAL.stats)
 	calc_move(get_viewport().get_mouse_position(), delta)
 	
 	

@@ -3,9 +3,10 @@
 [ext_resource path="res://texture/fonts/NeutralFace.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://texture/UI/bar.png" type="Texture" id=2]
 [ext_resource path="res://code/ui_logic/hud.gd" type="Script" id=3]
-[ext_resource path="res://science/UI/ability_button.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/UI/ability_button.tscn" type="PackedScene" id=4]
 [ext_resource path="res://texture/UI/granate_ico.png" type="Texture" id=5]
 [ext_resource path="res://texture/UI/helthpack_ico.png" type="Texture" id=6]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 32

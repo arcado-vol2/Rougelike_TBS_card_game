@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://texture/units/selected.png" type="Texture" id=1]
 [ext_resource path="res://texture/units/Player.png" type="Texture" id=2]
 [ext_resource path="res://code/unit_logic/unit.gd" type="Script" id=3]
-[ext_resource path="res://science/units/unite_SM.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/units/unite_SM.tscn" type="PackedScene" id=4]
 [ext_resource path="res://texture/shaders/normal.tres" type="Material" id=5]
+[ext_resource path="res://code/unit_logic/stats.gd" type="Script" id=6]
 
 [sub_resource type="CapsuleShape2D" id=3]
 height = 0.0
@@ -307,6 +308,9 @@ tracks/1/keys = {
 material = ExtResource( 5 )
 script = ExtResource( 3 )
 
+[node name="stats" type="Node" parent="."]
+script = ExtResource( 6 )
+
 [node name="attack_range_ray" type="RayCast2D" parent="."]
 position = Vector2( 0, -5 )
 enabled = true
@@ -362,48 +366,48 @@ anims/run_up = SubResource( 17 )
 rotation = 0.785398
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_left" type="RayCast2D" parent="Rays"]
 rotation = -0.785398
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_right2" type="RayCast2D" parent="Rays"]
 rotation = 1.309
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_left2" type="RayCast2D" parent="Rays"]
 rotation = -1.309
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_front" type="RayCast2D" parent="Rays"]
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_front2" type="RayCast2D" parent="Rays"]
 rotation = 0.279253
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="ray_front3" type="RayCast2D" parent="Rays"]
 rotation = -0.279253
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 50, 0 )
+cast_to = Vector2( 30, 0 )
 collision_mask = 2
 
 [node name="stop_timer" type="Timer" parent="."]
@@ -419,12 +423,6 @@ one_shot = true
 [node name="2_ability_timer" type="Timer" parent="Abilities"]
 wait_time = 10.0
 one_shot = true
-
-[node name="Label" type="Label" parent="."]
-margin_left = -21.0
-margin_top = -43.0
-margin_right = 19.0
-margin_bottom = -29.0
 
 [connection signal="body_entered" from="Vision_range" to="." method="_on_Vision_range_body_entered"]
 [connection signal="body_exited" from="Vision_range" to="." method="_on_Vision_range_body_exited"]

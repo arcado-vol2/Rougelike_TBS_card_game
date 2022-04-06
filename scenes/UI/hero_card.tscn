@@ -1,10 +1,11 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://texture/UI/fox_portrait.png" type="Texture" id=1]
-[ext_resource path="res://science/UI/ability_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/UI/ability_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://texture/UI/helthpack_ico.png" type="Texture" id=3]
 [ext_resource path="res://texture/UI/granate_ico.png" type="Texture" id=4]
 [ext_resource path="res://texture/UI/card_bg.png" type="Texture" id=5]
+
 
 [node name="Control" type="HBoxContainer"]
 anchor_right = 1.0
