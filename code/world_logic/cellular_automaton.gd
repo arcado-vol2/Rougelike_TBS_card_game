@@ -40,7 +40,7 @@ func Draw():
 		for y in range(0,bottom-top+1):
 			find_parent("TileMap").set_cell(left+x,top+y,noise[x][y])
 
-func iterate(iternum): #Итерации
+func iterate(iternum): 
 	for iteration in range(0,iternum):
 		for x in range(1,right-left+1):
 			for y in range(1,bottom-top+1):
@@ -52,23 +52,12 @@ func iterate(iternum): #Итерации
 			for y in range(1,bottom-top):
 				noise[x][y]=wrlmap[x][y]
 
-func neighwalls(x,y
-):#количество стен соседей
+func neighwalls(x,y):
 	var count=0
-	if noise[x-1][y]==1:
-		count+=1
-	if noise[x+1][y]==1:
-		count+=1
-	if noise[x][y-1]==1:
-		count+=1
-	if noise[x][y+1]==1:
-		count+=1
-	if noise[x-1][y-1]==1:
-		count+=1
-	if noise[x+1][y-1]==1:
-		count+=1
-	if noise[x+1][y+1]==1:
-		count+=1
-	if noise[x-1][y+1]==1:
-		count+=1
+	for x1 in range(x-1,x+2):
+		for y1 in range (y-1,y+2):
+			if (y1==y) && (x1==x):
+				continue
+			if noise[x1][y1]==1:
+				count+=1
 	return count

@@ -3,7 +3,7 @@ var prefabs
 
 
 func _BSP():
-	prefabs = [Save_load_system.load_prefab(), Save_load_system.load_file(1)]
+	#prefabs = [Save_load_system.load_prefab(), Save_load_system.load_file(1)]
 	var binary_room = load("res://code/world_logic/binary_room.gd")
 	var rt = binary_room.new(0,50,0,50,0)
 	add_child(rt)
@@ -11,19 +11,19 @@ func _BSP():
 	rt.Split()
 	rt.trim()
 	rt.Drawb() 
-	#rt.AddCoridors()
+	rt.AddCoridors()
+	rt.optimize(0,100,0,100) #Размеры карты, для удаления ненужных стен
 
 func _cell():
-	var cellar = load("res://code/world_logic/BSP_+_cellar.gd")
-	var t = cellar.new(Vector2.ZERO, 20,20,0.5,2)
+	var cellular = load("res://code/world_logic/BSP_+_cellular.gd")
+	var t = cellular.new(Vector2.ZERO, 20,20,0.5,2)
 	add_child(t)
-	t.cellar_auto(2,2)
+	t.cellular_auto(2,2)
 	t.fill([[10, 10]])
 	t.draw()
 	
 func _ready():
-	_BSP()
-	#rt.optimize(0,100,0,100) #Размеры карты, для удаления ненужных стен
+	_cell()
 
 func get_prefabs():
 	return prefabs
