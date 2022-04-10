@@ -10,6 +10,16 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "Graph",
+"language": "GDScript",
+"path": "res://code/structs/graph.gd"
+}, {
+"base": "Node",
+"class": "ability",
+"language": "GDScript",
+"path": "res://code/unit_logic/abilities/ability.gd"
+}, {
+"base": "Node",
 "class": "state_machine",
 "language": "GDScript",
 "path": "res://code/unit_logic/state_machine.gd"
@@ -20,6 +30,8 @@ _global_script_classes=[ {
 "path": "res://code/unit_logic/unit.gd"
 } ]
 _global_script_class_icons={
+"Graph": "",
+"ability": "",
 "state_machine": "",
 "unit": ""
 }
@@ -27,13 +39,14 @@ _global_script_class_icons={
 [application]
 
 config/name="RTS"
-run/main_scene="res://science/UI/menu.tscn"
+run/main_scene="res://scenes/UI/menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 room="*res://code/world_logic/room.gd"
-UNIT_GLOBAL="*res://code/unit_logic/global_unit.gd"
+Unit_global="*res://code/unit_logic/global_unit.gd"
+Save_load_system="*res://code/world_logic/save_load_system.gd"
 
 [display]
 

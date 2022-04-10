@@ -2,9 +2,6 @@ extends room
 export var tlrand = 0
 var room=load("res://code/world_logic/room.gd")
 var binary_room=load("res://code/world_logic/binary_room.gd")
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 var rng = RandomNumberGenerator.new()
 const minCorridorThickness=2
 const CorridorMargin=1
@@ -79,7 +76,7 @@ func HorizontalSplit():
 
 
 func _ready():
-	randomize() # Replace with function body.
+	randomize() 
 
 func Drawb(): #Отрисовка комнат
 	if (IsLeaf()):
@@ -103,7 +100,7 @@ func trim(): # случайная обрезка краев комнат
 	if (rightroom!=null):
 		rightroom.trim()
 
-func GetRigthConnections(): #Найти правые точки соединения
+func GetRigthConnections(): #Определяем возможные точки соединения комнат
 	var connections =[]
 	if (!IsLeaf()):
 		if(rightroom!=null):
@@ -116,7 +113,7 @@ func GetRigthConnections(): #Найти правые точки соединен
 			connections.append(allptns)
 	return connections
 
-func GetLeftConnections(): #Найти левые точки соединения
+func GetLeftConnections(): #Определяем возможные точки соединения комнат
 	var connections =[]
 	if (!IsLeaf()):
 		if(leftroom!=null):
@@ -129,7 +126,7 @@ func GetLeftConnections(): #Найти левые точки соединени�
 			connections.append(allptns)
 	return connections
 
-func GetTopConnections(): #Найти верхние точки соединения
+func GetTopConnections(): #Определяем возможные точки соединения комнат
 	var connections =[]
 	if (!IsLeaf()):
 		if(leftroom!=null):
@@ -142,7 +139,7 @@ func GetTopConnections(): #Найти верхние точки соединен
 			connections.append(allptns)
 	return connections
 
-func GetBottomConnections(): #Найти нижниеточки соединения
+func GetBottomConnections(): #Определяем возможные точки соединения комнат
 	var connections =[]
 	if (!IsLeaf()):
 		if(rightroom!=null):
@@ -192,7 +189,7 @@ func GetIntersectionGroups(points): #Определить группы соед�
 		cnt+=1
 	return rezgroups
 
-func Intersecty(arr1,arr2): #Найти смежные точки соединения по y
+func Intersecty(arr1,arr2): #Необходимо для определения положения коридора
 	var arr3=[]
 	for x in arr1:
 		for y in arr2:
@@ -202,7 +199,7 @@ func Intersecty(arr1,arr2): #Найти смежные точки соедине
 				continue
 	return arr3
 	
-func Intersectx(arr1,arr2): #Найти смежные точки соединения по x
+func Intersectx(arr1,arr2): #Необходимо для определения положения коридора
 	var arr3=[]
 	for x in arr1:
 		for y in arr2:
@@ -212,7 +209,7 @@ func Intersectx(arr1,arr2): #Найти смежные точки соедине
 				continue
 	return arr3
 
-func AddCoridors(): #Добавить коридоры
+func AddCoridors():
 	var corridor
 	if (IsLeaf()):
 		return;
@@ -240,19 +237,18 @@ func AddCoridors(): #Добавить коридоры
 			add_child(corridor)
 			corridor.Draw(0)
 
-func neigh(x,y): #являются ли соседи пустыми или стенами
-	return ((find_parent("TileMap").get_cell(x,y)==1) &&
-	(find_parent("TileMap").get_cell(x-1,y)==1 ||find_parent("TileMap").get_cell(x-1,y)==-1) &&
-	(find_parent("TileMap").get_cell(x+1,y)==1 ||find_parent("TileMap").get_cell(x+1,y)==-1) &&
-	(find_parent("TileMap").get_cell(x,y-1)==1 ||find_parent("TileMap").get_cell(x,y-1)==-1) &&
-	(find_parent("TileMap").get_cell(x,y+1)==1 ||find_parent("TileMap").get_cell(x,y+1)==-1) &&
-	(find_parent("TileMap").get_cell(x-1,y-1)==1 ||find_parent("TileMap").get_cell(x-1,y-1)==-1) &&
-	(find_parent("TileMap").get_cell(x+1,y-1)==1 ||find_parent("TileMap").get_cell(x+1,y-1)==-1) &&
-	(find_parent("TileMap").get_cell(x+1,y+1)==1 ||find_parent("TileMap").get_cell(x+1,y+1)==-1) &&
-	(find_parent("TileMap").get_cell(x-1,y+1)==1 ||find_parent("TileMap").get_cell(x-1,y+1)==-1))
+func optneigh(x,y):#необходимо ли удалять тайл
+	var count=0
+	for x1 in range(x-1,x+2):
+		for y1 in range(y-1,y+2):
+			if find_parent("TileMap").get_cell(x1,y1)==0:
+				return false
+			if (x1==x) && (y1==y):
+				continue
+	return true
 
 func optimize(a,b,c,d): #Удаление ненужных стен
 	for x in range(a,b+1):
 		for y in range (c,d+1):
-			if neigh(x,y):
+			if optneigh(x,y):
 				find_parent("TileMap").set_cell(x,y,-1)

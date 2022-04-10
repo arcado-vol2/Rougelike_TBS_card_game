@@ -1,6 +1,6 @@
 extends Node2D
 
-const EXPLOSION = preload("res://science/effects/explosion_effect.tscn")
+const EXPLOSION = preload("res://scenes/effects/explosion_effect.tscn")
 var possible_targets = []
 export var damage = 10
 func _ready():
