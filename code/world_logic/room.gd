@@ -6,6 +6,8 @@ var top
 var bottom
 var tile
 
+
+
 func GetWidth():
 	return right-left+1
 
