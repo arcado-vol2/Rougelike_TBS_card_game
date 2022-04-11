@@ -41,21 +41,3 @@ tile_set = SubResource( 1 )
 cell_size = Vector2( 8, 8 )
 cell_custom_transform = Transform2D( 8, 0, 0, 8, 0, 0 )
 format = 1
-<<<<<<< HEAD
-
-[node name="Button" type="Button" parent="."]
-margin_left = 583.0
-margin_top = 294.0
-margin_right = 714.0
-margin_bottom = 379.0
-
-[node name="Button2" type="Button" parent="."]
-margin_left = 420.0
-margin_top = 290.0
-margin_right = 552.0
-margin_bottom = 423.0
-
-[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
-=======
->>>>>>> 6207de5f6b3863946d2a134f7993101260b0b744
