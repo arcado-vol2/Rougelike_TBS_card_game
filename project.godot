@@ -10,14 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
-<<<<<<< HEAD
 "class": "Graph",
 "language": "GDScript",
 "path": "res://code/structs/graph.gd"
 }, {
 "base": "Node",
-=======
->>>>>>> 6207de5f6b3863946d2a134f7993101260b0b744
 "class": "ability",
 "language": "GDScript",
 "path": "res://code/unit_logic/abilities/ability.gd"
@@ -33,10 +30,7 @@ _global_script_classes=[ {
 "path": "res://code/unit_logic/unit.gd"
 } ]
 _global_script_class_icons={
-<<<<<<< HEAD
 "Graph": "",
-=======
->>>>>>> 6207de5f6b3863946d2a134f7993101260b0b744
 "ability": "",
 "state_machine": "",
 "unit": ""

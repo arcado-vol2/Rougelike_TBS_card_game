@@ -89,13 +89,10 @@ func _compare_distance(a,b):
 	else:
 		return true
 
-
-
 func create_min_connected(count_of_loops = 0):
 	var adj_old
 	if count_of_loops != 0:
 		adj_old = adj_2.duplicate()
-	
 	var iter = 0
 	adj_2.sort_custom(self,"_compare_distance")
 	while iter < len(adj_2):
