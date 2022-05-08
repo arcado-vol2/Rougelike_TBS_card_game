@@ -23,7 +23,8 @@ func _cell():
 	t.draw()
 	
 func _ready():
-	_cell()
+	#_cell()
+	_BSP()
 
 func get_prefabs():
 	return prefabs

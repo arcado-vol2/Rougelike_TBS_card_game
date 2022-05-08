@@ -75,7 +75,7 @@ func _on_Button_pressed():
 	for i in tile_map.get_used_cells():
 		tile_map.set_cell(i.x, i.y, -1)
 	#g.delete_edge(1,2)
-	g.create_min_connected()
+	g.create_min_connected(2)
 	for i in g.adj_2:
 		draw_ray(g.peaks[i.x].x, g.peaks[i.x].y, g.peaks[i.y].x, g.peaks[i.y].y)
 
