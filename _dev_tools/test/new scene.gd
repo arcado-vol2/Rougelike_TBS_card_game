@@ -2,9 +2,12 @@ extends Node
 
 onready var tile_map = $TileMap
 
+<<<<<<< HEAD
 
 const Graph = preload("res://code/structs/graph.gd")
 
+=======
+>>>>>>> d273f0d99a7d6fd0bebe6a4e9a5b029a083be7f9
 
 func draw_ray(x1,y1,x2,y2):
 	var dx = x2 - x1
@@ -48,6 +51,7 @@ func draw_ray(x1,y1,x2,y2):
 		t += 1
 		tile_map.set_cell(x,y,1)
 
+<<<<<<< HEAD
 
 var g
 
@@ -87,3 +91,45 @@ func _on_Button2_pressed():
 
 
 
+=======
+func _ready():
+	var points = [Vector2(1,1), Vector2(1,41), Vector2(41,41), Vector2(61,1), Vector2(21,21)]
+	var tmp = Geometry.triangulate_delaunay_2d(points)
+	var tmp2 = []
+	for i in len(tmp)/3:
+		for n in range(3):
+			tmp2.append(points[tmp[(i*3)+n]])
+			
+	var graf = {}
+	for i in len(tmp2)/3:
+	
+		if not tmp2[i*3] in graf:
+			graf[tmp2[i*3]] = []
+		if not tmp2[i*3+1] in graf[tmp2[i*3]]:
+			graf[tmp2[i*3]].append(tmp2[i*3+1])
+		if not tmp2[i*3+2] in graf[tmp2[i*3]]:
+			graf[tmp2[i*3]].append(tmp2[i*3+2])
+		
+		if not tmp2[i*3+1] in graf:
+			graf[tmp2[i*3+1]] = []
+		if not tmp2[i*3] in graf[tmp2[i*3+1]]:
+			graf[tmp2[i*3+1]].append(tmp2[i*3])
+		if not tmp2[i*3+2] in graf[tmp2[i*3+1]]:
+			graf[tmp2[i*3+1]].append(tmp2[i*3+2])
+		
+		if not tmp2[i*3+2] in graf:
+			graf[tmp2[i*3+2]] = []
+		if not tmp2[i*3] in graf[tmp2[i*3+2]]:
+			graf[tmp2[i*3+2]].append(tmp2[i*3])
+		if not tmp2[i*3+1] in graf[tmp2[i*3+2]]:
+			graf[tmp2[i*3+2]].append(tmp2[i*3+1])
+	
+	for i in graf:
+		for j in graf[i]:
+			draw_ray(i.x,i.y,j.x,j.y)
+		
+	for i in graf:
+		print(i," --> ",graf[i])
+		tile_map.set_cell(i.x,i.y,0)
+	
+>>>>>>> d273f0d99a7d6fd0bebe6a4e9a5b029a083be7f9
