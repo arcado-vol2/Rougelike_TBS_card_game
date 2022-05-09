@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://code/unit_logic/abilities/ability.gd"
 }, {
 "base": "Node",
+"class": "math_line",
+"language": "GDScript",
+"path": "res://code/structs/math_line.gd"
+}, {
+"base": "Node",
 "class": "state_machine",
 "language": "GDScript",
 "path": "res://code/unit_logic/state_machine.gd"
@@ -32,6 +37,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Graph": "",
 "ability": "",
+"math_line": "",
 "state_machine": "",
 "unit": ""
 }
