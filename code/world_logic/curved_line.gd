@@ -10,7 +10,7 @@ onready var tile_map = $TileMap
 func parabolla(point1, point2):
 	var b
 	var a
-	if point1.y == point2.y:
+	if point1.y == point2.y or point1.x == point2.x:
 		b = 0
 		a = 0
 	else:
@@ -94,14 +94,13 @@ func draw_ray(p1,p2, radius = 0):
 	var error = el/2
 	var t = 0   
 	
-	if pdx == 1:
-		for i in radius:
-			tile_map.set_cell(x,y+i,0)
-			tile_map.set_cell(x,y-i,0)
-	else:
-		for i in radius:
-			tile_map.set_cell(x+i,y,0)
-			tile_map.set_cell(x-i,y,0)
+	for x_2 in radius:
+			for y_2 in radius:
+				if pow(x_2,2) + pow(y_2,2) <= pow(radius,2):
+					tile_map.set_cell(x + x_2, y + y_2 ,0)
+					tile_map.set_cell(x - x_2, y + y_2 ,0)
+					tile_map.set_cell(x + x_2, y - y_2 ,0)
+					tile_map.set_cell(x - x_2, y - y_2 ,0)
 	tile_map.set_cell(x,y,0)
 	
 	while t < el:
@@ -126,28 +125,37 @@ func draw_ray(p1,p2, radius = 0):
 		tile_map.set_cell(x,y,0)
 		
 		
-func _split(ln, min_w = 2, max_w = 10):
-	var t = ln
-	var t1 = []
-	for i in range(len(ln)):
-		var r = rng.randi_range(0,max_w)
-		if ln[i]/2 - r >= 3:    
-			t+=_split([ln[i]/2 - r])
-			t+=_split([ln[i]/2 + r])
-			if len(t)!=0:
-				t.remove(0)
-	ln =  t  
-	return ln
+func _split(ln,max_w = 10):
+	var t = []
+	for i in ln:
+		if i>=max_w:
+			var r = rng.randi_range(0, max_w/2)
+			t+=_split([i/2+r],max_w)
+			t+=_split([i/2-r],max_w)
+		else:
+			t.append(i)
+			
+	return t
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
-func suboptimal_path(start_point, end_point, start_range, end_range):
+func suboptimal_path(start_point, end_point, start_range, end_range, radius = 1):
 	#Базовые данные
 	if start_point.x > end_point.x:
 		var buffer = start_point
 		start_point = end_point
 		end_point = buffer
-	var x_split = _split([int(end_point.x - start_point.x)])
+	var x_split = _split([int(end_point.x - start_point.x)], 40)
+	
+	print(x_split)
 	
 	#Генерация вершин в пределах линий
 	var border_1 = math_line.new([start_point[0],start_point[1] + start_range], 
@@ -207,11 +215,21 @@ func suboptimal_path(start_point, end_point, start_range, end_range):
 		var p
 		for x in range(points[i-1][0],points[i][0]+1):
 			p = Vector2(x,int( a*pow(x,2)+b*x+c ))
-			draw_ray(last_point, p, 7)
+			draw_ray(last_point, p, radius)
 			last_point = p
-			
-
+		
+		
 
 func _on_Button_pressed():
-	var tmp = [1, 30, 80,70, 30, 10]
-	suboptimal_path(Vector2(tmp[0], tmp[1]), Vector2(tmp[2], tmp[3]), tmp[4], tmp[5])
+	_test_use()
+
+
+func _test_use():
+	for point in tile_map.get_used_cells():
+		tile_map.set_cell(point[0],point[1],-1)
+	var tmp = [$start_x.value, $start_y.value, $end_x.value,$end_y.value, $range_start.value, $range_end.value]
+	suboptimal_path(Vector2(tmp[0], tmp[1]), Vector2(tmp[2], tmp[3]), tmp[4], tmp[5], $radius.value)
+
+func _process(delta):
+	$start.position = Vector2($start_x.value, $start_y.value)
+	$end.position = Vector2($end_x.value,$end_y.value)
