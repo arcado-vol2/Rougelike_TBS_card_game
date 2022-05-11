@@ -7,6 +7,7 @@ var rng = RandomNumberGenerator.new()
 onready var tile_map = $TileMap
 
 
+#Математическая функция параболлы
 func parabolla(point1, point2):
 	var b
 	var a
@@ -19,7 +20,11 @@ func parabolla(point1, point2):
 	var c = point1[1]  - pow(point1[0],2)*a -  point1[0]*b
 	return [a,b,c]
 
+#Функция создания прямой
 func draw_ray(p1,p2, radius = 0, flip = false):
+	#p1 и p2 - точки старта и конца
+	#radius - толщина
+	#flip - для смены x на y
 	var x1
 	var y1
 	var x2
@@ -37,8 +42,7 @@ func draw_ray(p1,p2, radius = 0, flip = false):
 		x2 = p2[0]
 		y2 = p2[1]
 	
-	
-	
+	#далее всё строго по алгоритму Брезенхэма	
 	var dx = x2 - x1
 	var dy = y2 - y1
 	var sign_x = 1 if dx>0 else -1 if dx<0 else 0
@@ -64,6 +68,7 @@ func draw_ray(p1,p2, radius = 0, flip = false):
 	var error = el/2
 	var t = 0   
 	
+	#Тут толщина по окружности
 	for x_2 in radius:
 			for y_2 in radius:
 				if pow(x_2,2) + pow(y_2,2) <= pow(radius,2):
@@ -84,6 +89,7 @@ func draw_ray(p1,p2, radius = 0, flip = false):
 			y += pdy
 		t += 1
 		
+		#А тут только кусок
 		if pdx == 1:
 			for i in radius:
 				tile_map.set_cell(x,y+i,0)
@@ -94,6 +100,7 @@ func draw_ray(p1,p2, radius = 0, flip = false):
 				tile_map.set_cell(x-i,y,0)
 		tile_map.set_cell(x,y,0)
 
+#функция разбиения массива
 func _split(ln,max_w = 10):
 	var t = []
 	for i in ln:
@@ -106,30 +113,26 @@ func _split(ln,max_w = 10):
 	return t
 
 func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int, end_range: int, radius : int= 1):
-	#Базовые данные
-	
-		
-		
+	#Базовые данные	
 	var flip = true
+	#Тут усё для поворота
 	if  ((not (end_point.x - start_point.x > end_point.y - start_point.y)) or (end_point.x - start_point.x < - end_point.y + start_point.y)) and ((end_point.x - start_point.x > end_point.y - start_point.y) or (not (end_point.x - start_point.x < - end_point.y + start_point.y))):
 		var buff = start_point.x
 		start_point.x = start_point.y
 		start_point.y = buff
-		
 		buff = end_point.x
 		end_point.x = end_point.y
 		end_point.y = buff
 	else:
 		flip = false
+	
 	if start_point.x > end_point.x:
 		var buffer = start_point
 		start_point = end_point
 		end_point = buffer
-		
 		buffer = start_range
 		start_range = end_range
 		end_range = buffer
-	
 	var x_split = _split([int(end_point.x - start_point.x)], 40)
 	
 	
@@ -138,33 +141,26 @@ func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int,
 	[end_point[0],end_point[1] + end_range])
 	var border_2 = math_line.new([start_point[0],start_point[1] - start_range], 
 	[end_point[0],end_point[1] - end_range])
-	
 	var tmp = start_point[0]-1
 	var points = [start_point]
 	for i in range(len(x_split)):
 		tmp += x_split[i]
 		var b1 = points[i][1] + x_split[i]
 		var b2 = points[i][1] - x_split[i]
-		
 		b1 = min(b1,border_1.get_point(tmp))
 		b2 = max(b2,border_2.get_point(tmp))
 		points.append( Vector2(tmp, rng.randi_range(b2,b1)) )
 	points[len(points)-1] = end_point
+	
+	
 	#Создание дополнительных вершин
 	var tmp_points = [points[0]]
 	for i in range(1,len(points)-1):
 		tmp_points.append(points[i])
-		
-		
 		var max_y = max(points[i][1], points[i+1][1])
 		var min_y = min(points[i][1], points[i+1][1])
 		var d_y = abs( max_y - min_y)
 		var d_x = abs(min(points[i][0], points[i+1][0]) - max(points[i][0], points[i+1][0]))
-		
-		if false:
-			tmp_points.append(Vector2(
-				rng.randi_range(points[i][0]+int(d_x*0.2), points[i+1][0]-int(d_x*0.2)),
-				rng.randi_range(min_y+int(d_y*0.2),max_y-int(d_y*0.2)) ))
 		tmp_points.append(Vector2(points[i][0] + int(d_x*rng.randf_range(0.35,0.65)), min_y + int(d_y*rng.randf_range(0.35,0.65))  ))
 	tmp_points.append(points[len(points)-1])
 	points = tmp_points.duplicate()
@@ -208,5 +204,3 @@ func _test_use():
 func _process(delta):
 	$start.position = Vector2($start_x.value, $start_y.value)
 	$end.position = Vector2($end_x.value,$end_y.value)
-	#$start.position = Vector2($start_y.value, $start_x.value)
-	#$end.position = Vector2($end_y.value,$end_x.value)
