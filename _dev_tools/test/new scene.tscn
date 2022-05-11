@@ -58,7 +58,7 @@ cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 format = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 107, 59 )
+position = Vector2( 111, 59 )
 offset = Vector2( 72, 41 )
 current = true
 zoom = Vector2( 0.5, 0.5 )
@@ -74,14 +74,18 @@ margin_left = 272.0
 margin_top = 26.0
 margin_right = 354.0
 margin_bottom = 52.0
+min_value = 1.0
 max_value = 200.0
+value = 1.0
 
 [node name="end_x" type="HSlider" parent="."]
 margin_left = 273.0
 margin_top = 104.0
 margin_right = 355.0
 margin_bottom = 130.0
+min_value = 1.0
 max_value = 200.0
+value = 1.0
 
 [node name="start_y" type="VSlider" parent="."]
 margin_left = 293.0
@@ -89,7 +93,9 @@ margin_top = 104.0
 margin_right = 309.0
 margin_bottom = 159.0
 rect_rotation = 180.0
+min_value = 1.0
 max_value = 200.0
+value = 1.0
 
 [node name="end_y" type="VSlider" parent="."]
 margin_left = 292.0
@@ -97,7 +103,9 @@ margin_top = 188.0
 margin_right = 308.0
 margin_bottom = 243.0
 rect_rotation = 180.0
+min_value = 1.0
 max_value = 200.0
+value = 1.0
 
 [node name="radius" type="HSlider" parent="."]
 margin_left = 271.0

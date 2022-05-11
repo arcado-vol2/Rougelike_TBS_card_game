@@ -23,13 +23,10 @@ func _cell():
 	t.draw()
 	
 func _ready():
-<<<<<<< HEAD
 	#_cell()
 	_BSP()
-=======
 	pass
 	#_cell()
->>>>>>> d273f0d99a7d6fd0bebe6a4e9a5b029a083be7f9
 
 func get_prefabs():
 	return prefabs
