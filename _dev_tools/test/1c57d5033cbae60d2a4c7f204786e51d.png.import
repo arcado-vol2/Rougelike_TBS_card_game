@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tets_unit_demon.png-80dca2e2d253cf02216005205a497664.stex"
+path="res://.import/1c57d5033cbae60d2a4c7f204786e51d.png-f7ad5cd260e56a3ab6dd4fdd9caf6630.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://texture/units/tets_unit_demon.png"
-dest_files=[ "res://.import/tets_unit_demon.png-80dca2e2d253cf02216005205a497664.stex" ]
+source_file="res://_dev_tools/test/1c57d5033cbae60d2a4c7f204786e51d.png"
+dest_files=[ "res://.import/1c57d5033cbae60d2a4c7f204786e51d.png-f7ad5cd260e56a3ab6dd4fdd9caf6630.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=2
 flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false

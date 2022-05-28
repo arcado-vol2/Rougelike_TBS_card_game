@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/selected.png-93df4c163456e0b5dae0dc07dc826649.stex"
+path="res://.import/bunker_tail_set.png-5b737c2f1fec6a51dac0e64d92575050.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://texture/units/selected.png"
-dest_files=[ "res://.import/selected.png-93df4c163456e0b5dae0dc07dc826649.stex" ]
+source_file="res://texture/world/bunker_tail_set.png"
+dest_files=[ "res://.import/bunker_tail_set.png-5b737c2f1fec6a51dac0e64d92575050.stex" ]
 
 [params]
 

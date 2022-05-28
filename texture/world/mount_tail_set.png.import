@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/mount_tail_set.png-68e3e37cfe9e93c86598541737c95984.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://texture/world/mount_tail_set.png"
+dest_files=[ "res://.import/mount_tail_set.png-68e3e37cfe9e93c86598541737c95984.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

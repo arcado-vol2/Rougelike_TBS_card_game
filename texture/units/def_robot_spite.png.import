@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tets_unit_skeleton.png-b2feec5fdd9ddc4376ea4d5855a26c97.stex"
+path="res://.import/def_robot_spite.png-d4989459a6f7f7cfd1d525735d35518c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://texture/units/tets_unit_skeleton.png"
-dest_files=[ "res://.import/tets_unit_skeleton.png-b2feec5fdd9ddc4376ea4d5855a26c97.stex" ]
+source_file="res://texture/units/def_robot_spite.png"
+dest_files=[ "res://.import/def_robot_spite.png-d4989459a6f7f7cfd1d525735d35518c.stex" ]
 
 [params]
 

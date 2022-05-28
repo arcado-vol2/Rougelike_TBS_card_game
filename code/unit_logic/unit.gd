@@ -4,19 +4,21 @@ class_name unit
 #Константы
 const BOMB = preload("res://scenes/units/bomb.tscn")
 
+#Тело
+export var body = preload("res://scenes/effects/body_effect_base.tscn")
+
 #Команда игрока для юнита
 export var unit_owner := 0
 
 #Переменные анимации
-var cur_dir = 2
-var directions = {0: "up", 2:"down", 1:"right", 3:"left"}
-onready var animation_player = $AnimationPlayer
+onready var animation_tree = $AnimationTree
+onready var animation_tree_state = animation_tree.get("parameters/playback")
 
 #Переменные для движения
 var selected = false
 var movment_target = Vector2.ZERO
 var last_movment_target = Vector2.ZERO
-var velocity = Vector2.ZERO
+var velocity = Vector2(-1,1)
 var target_max = 20
 
 #Переменные для битвы
@@ -41,8 +43,8 @@ onready var hud = get_node("../../Camera2D/hud")
 onready var stop_timer = $stop_timer
 
 #Материалы
-var enemy_matirial = load("res://texture/shaders/invert.tres")
-
+var black_line_mat = load("res://texture/shaders/black_line.tres")
+var white_line_mat = load("res://texture/shaders/white_line.tres")
 #навигация
 var nav_path : PoolVector2Array
 var leg_reset_treshold = 19
@@ -59,7 +61,6 @@ var movment_group = []
 var coll = 0
 #Почему-то при первом касте луча колижен не срабатывае, поэтому нужен данный костыль
 func _process(delta):
-	
 	
 	#Вызывваем апдейт анимаций кнопок скилов в худе, РОМА, ТЫ ПОНЯЛ?
 	for i in abilities_timer.size():
@@ -78,15 +79,9 @@ func _process(delta):
 			
 			
 func _ready():
-	
-	
-	
-	
-	#attack_range_ray.cast_to = Vector2(attack_range,0)
+	animation_tree.active = true
 	movment_target = position
 	#пока скорее для тестов
-	if unit_owner == 1:
-		material = enemy_matirial
 	
 
 
@@ -118,6 +113,8 @@ func move_with_avoidance():
 		var viable_ray = _get_viable_ray()
 		if viable_ray:
 			velocity = Vector2.RIGHT.rotated((rays.rotation_degrees  +  viable_ray.rotation_degrees) * PI/180 ) * stats.speed
+		else:
+			return
 	move_and_slide(velocity)
 	
 #Функция, похволяющая юнитам собиратся максимально возможно в одной точке
@@ -178,12 +175,13 @@ func selected():
 	for i in abilities_timer.size():
 		hud.update_button(i, abilities_timer[i].time_left, abilities_timer[i].wait_time)
 	selected = true
-	$Selected.visible = true
+	$Sprite.material = white_line_mat
 #Меняем статус "выбраности" юнита
 func unselected():
 	Unit_global.remove_unit(stats.unit_name)
 	selected = false
-	$Selected.visible = false
+	$Sprite.material = black_line_mat
+	#$Selected.visible = false
 
 #Добавляем тело, если оно в поле зрения, в доступные цели, игнорируя стены
 func _on_Vision_range_body_entered(body):
@@ -316,3 +314,6 @@ func use_ability(index):
 					stats.health = stats.max_health
 				abilities_timer[index].start()
 				
+
+
+

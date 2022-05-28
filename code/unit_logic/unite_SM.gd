@@ -33,7 +33,7 @@ func _ready():
 	add_state("die")
 	call_deferred("set_state", states.idle)
 	
-
+	
 func _input(event):
 	if parent.selected and state != states.die:
 		#Использование 1 абилки
@@ -76,33 +76,23 @@ func _input(event):
 				command_mod_list.ATTACK:
 					command = commands_list.ATTACK
 				command_mod_list.ABILITY:
-					print(132)
 					command = commands_list.ABILITY
 			
 			
 
 #Функция для анимации поворота 
 func change_dir():
-	if parent.velocity.angle() < -0.75 and parent.velocity.angle() > -2.25:
-		parent.cur_dir = 0
-	elif parent.velocity.angle() > -0.75 and parent.velocity.angle() < 0.75:
-		parent.cur_dir = 1
-	elif parent.velocity.angle() > 0.75 and parent.velocity.angle() < 2.25:
-		parent.cur_dir = 2
-	else:
-		parent.cur_dir = 3
+	parent.animation_tree.set("parameters/idle/blend_position", parent.velocity.normalized())
+	parent.animation_tree.set("parameters/run/blend_position", parent.velocity.normalized())
+	parent.animation_tree.set("parameters/atack/blend_position", parent.velocity.normalized())
 
 func _state_logic(delta):
 	match state:
-		states.idle:
-			pass
 		states.move:
 			#БЕГИМ
-			parent.animation_player.play("run_"+parent.directions[parent.cur_dir])
 			parent.move_along_path(delta)
 		states.engage:
 			#Стоим в ингаге, пока цель существует
-			parent.animation_player.play("run_"+parent.directions[parent.cur_dir])
 			if parent.attack_target.get_ref():
 				parent.move_to_target(delta, parent.attack_target.get_ref().position)
 			else:
@@ -115,6 +105,8 @@ func _state_logic(delta):
 func _enter_state(new_state, prev_state):
 	match state:
 		states.idle:
+			print(1)
+			parent.animation_tree_state.travel("idle")
 			#Проверяем используется ли абилка прямо сейчас
 			if command == commands_list.ABILITY:
 				#И тогда её используем
@@ -130,8 +122,9 @@ func _enter_state(new_state, prev_state):
 			else:
 				command_queue = []
 				parent.set_collision_layer_bit(1,true)
-				parent.animation_player.play("idle_"+parent.directions[parent.cur_dir])
+				parent.animation_tree_state.travel("idle")
 		states.move:
+			parent.animation_tree_state.travel("run")
 			#Объясню один раз, а ты запомни
 			#Во время движения челы хотят обходит стоящих юнитов
 			#Поэтому мы ставим их на слой, который воспринимают наши лучи
@@ -139,16 +132,16 @@ func _enter_state(new_state, prev_state):
 			#Рома ты понял?
 			parent.set_collision_layer_bit(1,false)
 		states.engage:
+			parent.animation_tree_state.travel("run")
 			parent.set_target(parent.attack_target.get_ref().position)
 			parent.set_collision_layer_bit(1,false)
 		states.attack:
 			parent.set_collision_layer_bit(1,true)
 			parent.velocity = parent.position.direction_to(parent.attack_target.get_ref().position)
 			change_dir()
-			parent.animation_player.play("atack_"+parent.directions[parent.cur_dir])
+			parent.animation_tree_state.travel("atack")
 		states.die:
-			parent.animation_player.play("die_"+parent.directions[parent.cur_dir])
-	
+			parent.animation_tree_state.travel("die")
 
 #Тут лень всё рассписывать
 #кратко: меняем стейты, от условий достижения целей для определённых состояний
@@ -177,6 +170,7 @@ func _get_transition(delta):
 						parent.set_target(parent.position)
 						command = commands_list.NONE
 						set_state(states.idle)
+						
 				commands_list.ABILITY:
 					if parent.position.distance_to(parent.movment_target) < parent.ability_range[parent.ability_index]:
 						parent.set_target(parent.position)
@@ -213,14 +207,14 @@ func died():
 #Казалось бы логика атаки запихнута в анимацию, говнокод
 #Однако нет - это самое элигантное, что можно сделать
 #вед урон оружие должно нансоить после цикла атаки, что тут и происходит
-func _on_AnimationPlayer_animation_finished(anim_name):
+func atack_logic():
 	match state:
 		states.attack:
 			if parent.attack_target.get_ref():
-				if parent.attack_target.get_ref().take_damage(parent.damage):
-					if parent.target_within_range():
-						pass
-					else:
+				parent.velocity = ( parent.attack_target.get_ref().position - parent.position).normalized()
+				change_dir()
+				if parent.attack_target.get_ref().take_damage(parent.stats.damage):
+					if not parent.target_within_range():
 						set_state(states.engage)
 						
 				else:
@@ -228,20 +222,21 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 			else:
 				set_state(states.idle)
 				
-			parent.animation_player.play("atack_"+parent.directions[parent.cur_dir])
 		#Плюс фигня чтобы анимации красивши были
 		states.die:
-			parent.queue_free()
-		states.idle:
-			parent.animation_player.play("idle_"+parent.directions[parent.cur_dir])
+			parent.animation_tree_state.travel("die")
 		states.engage:
 			change_dir()
-			parent.animation_player.play("run_"+parent.directions[parent.cur_dir])
-			
-		
 
 #Если не сдохли, то по истечению таймера останавливаемся
 func _on_stop_timer_timeout():
 	if state != states.die:
 		set_state(states.idle)
 		parent.set_target(parent.position)
+		
+func create_body():
+	print(46)
+	var body = parent.body.instance()
+	body.position = parent.position
+	parent.get_parent().add_child(body)
+	parent.queue_free()

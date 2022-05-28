@@ -7,6 +7,7 @@
 [ext_resource path="res://texture/UI/card_bg.png" type="Texture" id=5]
 
 
+
 [node name="Control" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0

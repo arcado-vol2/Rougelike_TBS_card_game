@@ -8,6 +8,7 @@
 [ext_resource path="res://texture/UI/helthpack_ico.png" type="Texture" id=6]
 
 
+
 [sub_resource type="DynamicFont" id=1]
 size = 32
 font_data = ExtResource( 1 )

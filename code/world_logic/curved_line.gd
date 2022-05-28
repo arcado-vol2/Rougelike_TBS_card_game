@@ -116,6 +116,7 @@ func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int,
 	#Базовые данные	
 	var flip = true
 	#Тут усё для поворота
+	#ксором проверяем положение
 	if  ((not (end_point.x - start_point.x > end_point.y - start_point.y)) or (end_point.x - start_point.x < - end_point.y + start_point.y)) and ((end_point.x - start_point.x > end_point.y - start_point.y) or (not (end_point.x - start_point.x < - end_point.y + start_point.y))):
 		var buff = start_point.x
 		start_point.x = start_point.y
@@ -133,7 +134,7 @@ func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int,
 		buffer = start_range
 		start_range = end_range
 		end_range = buffer
-	var x_split = _split([int(end_point.x - start_point.x)], 40)
+	var x_split = _split([int(end_point.x - start_point.x)], 10)
 	
 	
 	#Генерация вершин в пределах линий
@@ -161,18 +162,16 @@ func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int,
 		var min_y = min(points[i][1], points[i+1][1])
 		var d_y = abs( max_y - min_y)
 		var d_x = abs(min(points[i][0], points[i+1][0]) - max(points[i][0], points[i+1][0]))
+		#Выбираем случайную точку в пределах x и у двух ближащих точек
+		#                   ___---0                              ___---0
+		#        ___--о--‾‾‾               ==>         -o----‾‾‾‾
+		#  0--‾‾‾                                  0--/ 
 		tmp_points.append(Vector2(points[i][0] + int(d_x*rng.randf_range(0.35,0.65)), min_y + int(d_y*rng.randf_range(0.35,0.65))  ))
 	tmp_points.append(points[len(points)-1])
 	points = tmp_points.duplicate()
 	
-	
-	
-	for p in range(1,len(points)):
-		pass #draw_ray(points[p-1], points[p])
-	
-	var last_point = start_point
 	#cглаживание
-	
+	var last_point = start_point
 	for i in range(1,len(points)):
 		#Первая половинка параболлы
 		var par
@@ -185,11 +184,15 @@ func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int,
 		var b = par[1]
 		var c = par[2]
 		var p
+		#в общем порядке рисуем прямую от прошлой точки, принадлежащей
+		#параболле к текущей
 		for x in range(points[i-1][0],points[i][0]+1):
 			p = Vector2(x,int( a*pow(x,2)+b*x+c ))
 			draw_ray(last_point, p, radius, flip)
 			last_point = p
 
+
+#фигня для тестирования
 func _on_Button_pressed():
 	_test_use()
 
@@ -202,5 +205,6 @@ func _test_use():
 		suboptimal_path(Vector2(tmp[0], tmp[1]), Vector2(tmp[2], tmp[3]), tmp[4], tmp[5], $radius.value)
 
 func _process(delta):
+	
 	$start.position = Vector2($start_x.value, $start_y.value)
 	$end.position = Vector2($end_x.value,$end_y.value)
