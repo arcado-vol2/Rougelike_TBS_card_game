@@ -933,7 +933,7 @@ material = ExtResource( 7 )
 position = Vector2( 2, 0 )
 texture = ExtResource( 2 )
 hframes = 142
-frame = 24
+frame = 48
 
 [node name="Unite_SM" parent="." instance=ExtResource( 4 )]
 
@@ -973,7 +973,6 @@ anims/right_back = SubResource( 27 )
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = ExtResource( 3 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/playback = SubResource( 28 )
 parameters/atack/blend_position = Vector2( 0, 0 )
 parameters/idle/blend_position = Vector2( -0.0730923, -0.767241 )
