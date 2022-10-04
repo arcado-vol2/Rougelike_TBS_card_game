@@ -161,12 +161,7 @@ func set_target(target):
 	stop_timer.stop()
 	movment_group = contoller.get_movment_group()
 	nav_path = nav2d.get_simple_path(self.global_position, target, true)
-	var nn_pp : PoolVector2Array
-	nn_pp.append(nav_path[0])
-	for i in range(1, len(nav_path)):
-		nn_pp.append(Vector2(nav_path[i].x-20, nav_path[i].y-20))
-	nn_pp.append(nav_path[len(nav_path)-1])
-	nav_path = nn_pp
+	
 	get_tree().current_scene.get_child(5).clear_points()
 	for p in nav_path:
 		get_tree().current_scene.get_child(5).add_point(p)
