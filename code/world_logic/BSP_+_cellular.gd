@@ -5,8 +5,14 @@ var start = Vector2()
 var rng = RandomNumberGenerator.new()
 var width = 0
 var height = 0
+var mapPosition
+var Map
+
+func setMap(_Map):
+	Map=_Map
 
 func _init(s,w,h,chance, mult):
+	mapPosition = s + Vector2(w/2,h/2)
 	width = float(w)
 	height = float(h)
 	rng.seed = hash(OS.get_datetime()["second"] + OS.get_datetime()["minute"] + OS.get_datetime()["hour"])
@@ -24,6 +30,11 @@ func _init(s,w,h,chance, mult):
 			else:
 				tmp.append(1)
 		canvas.append(tmp)
+
+func createRoom():
+	cellular_auto(2,2)
+	fill([[10, 10]])
+	draw()
 
 func _get_neighwalls(point, radius, ignore_center = true):
 	var count = 0
@@ -85,9 +96,9 @@ func draw():
 	for x in len(canvas):
 		for y in len(canvas[x]):
 			if canvas[x][y] == 2:
-				find_parent("TileMap").set_cell(start.x+x, start.y+y,0)
+				Map.set_cell(start.x+x, start.y+y,0)
 			else:
-				find_parent("TileMap").set_cell(start.x+x, start.y+y,1)
+				Map.set_cell(start.x+x, start.y+y,1)
 				
 				
 

@@ -4,7 +4,13 @@ extends Node
 
 
 var rng = RandomNumberGenerator.new()
-onready var tile_map = $TileMap
+var start_range = 5
+var end_range = 5
+var radius = 2
+onready var tile_map
+
+func setTilemap(tileMap):
+	tile_map=tileMap
 
 
 #Математическая функция параболлы
@@ -112,7 +118,7 @@ func _split(ln,max_w = 10):
 			t.append(i)
 	return t
 
-func suboptimal_path(start_point: Vector2, end_point: Vector2, start_range: int, end_range: int, radius : int= 1):
+func suboptimal_path(start_point: Vector2, end_point: Vector2):
 	#Базовые данные	
 	var flip = true
 	#Тут усё для поворота
@@ -202,9 +208,9 @@ func _test_use():
 		tile_map.set_cell(point[0],point[1],-1)
 	var tmp = [$start_x.value, $start_y.value, $end_x.value,$end_y.value, $range_start.value, $range_end.value]
 	for i in 1:
-		suboptimal_path(Vector2(tmp[0], tmp[1]), Vector2(tmp[2], tmp[3]), tmp[4], tmp[5], $radius.value)
+		suboptimal_path(Vector2(tmp[0], tmp[1]), Vector2(tmp[2], tmp[3]))
 
-func _process(delta):
-	
-	$start.position = Vector2($start_x.value, $start_y.value)
-	$end.position = Vector2($end_x.value,$end_y.value)
+#func _process(delta):
+#
+#	$start.position = Vector2($start_x.value, $start_y.value)
+#	$end.position = Vector2($end_x.value,$end_y.value)
