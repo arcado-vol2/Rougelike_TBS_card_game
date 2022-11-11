@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 var Room=preload("res://scenes/world/Room.tscn")
 var BuildingPath_script=load("res://code/world_logic/Building_Path.gd")
@@ -15,13 +15,17 @@ export var vspread=400
 var culchance=0.2
 var path
 var Map
+var astar_map
 var trimtiles=3
 
-func _ready():
-	generate()
+signal generation_complete
 
-func setMap(_Map):
+#func _ready():
+#	generate()
+
+func setMap(_Map, _astar_map):
 	Map=_Map
+	astar_map = _astar_map
 
 func setRooms(_Rooms):
 	Rooms=_Rooms
@@ -29,8 +33,13 @@ func setRooms(_Rooms):
 func generate():
 	yield(make_rooms(), 'completed')
 	Make_Map()
-	#place_objectives()
+	emit_signal("generation_complete")
 
+
+func _set_cell(x,y, cell = 0):
+	Map.set_cell(x,y, cell)
+	astar_map.set_cell(x,y, 0)
+	
 func make_rooms():
 	randomize()
 	for i in range(room_nums):
@@ -55,9 +64,9 @@ func make_rooms():
 
 
 func Make_Map():
-	for x in range(-200,201):
-		for y in range(-200,201):
-			Map.set_cell(x,y,1)
+#	for x in range(-200,201):
+#		for y in range(-200,201):
+#			_set_cell(x,y,1)
 	var corridors=[]
 	var ref = funcref(self, "curve_path")
 	BuildingPath_script.drawCorridors(ref,path,Rooms)
@@ -67,7 +76,7 @@ func Make_Map():
 		var ul=pos-st
 		for x in range(1+trimtiles,st.x*2-trimtiles+1):
 			for y in range(1+trimtiles,st.y*2-trimtiles+1):
-				Map.set_cell(ul.x+x,ul.y+y,0)
+				_set_cell(ul.x+x,ul.y+y)
 #		var p = path.get_closest_point(room.position)
 #		for conn in path.get_point_connections(p):
 #			if not conn in corridors:
@@ -88,17 +97,17 @@ func curve_path(start,end):
 		x_y=end
 		y_x=start
 	for x in range(start.x,end.x,x_diff):
-		Map.set_cell(x,x_y.y,0)
+		_set_cell(x,x_y.y)
 		if ch==0:
-			Map.set_cell(x,x_y.y+y_diff,0)
+			_set_cell(x,x_y.y+y_diff)
 		else:
-			Map.set_cell(x,x_y.y-y_diff,0)
+			_set_cell(x,x_y.y-y_diff)
 	for y in range(start.y,end.y,y_diff):
-		Map.set_cell(y_x.x,y,0)
+		_set_cell(y_x.x,y)
 		if ch==0:
-			Map.set_cell(y_x.x+x_diff,y,0)
+			_set_cell(y_x.x+x_diff,y)
 		else:
-			Map.set_cell(y_x.x-x_diff,y,0)
+			_set_cell(y_x.x-x_diff,y)
 
 #func _process(delta):
 #	update()

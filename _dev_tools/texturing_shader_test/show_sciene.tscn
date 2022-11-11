@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://_dev_tools/texturing_shader_test/test_sprite.png" type="Texture" id=1]
+[ext_resource path="res://texture/world/mount_wall_textures.png" type="Texture" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform sampler2D color_texture;
+
+void fragment(){
+	if (COLOR.rgb.r == 0.0){
+		COLOR.rgb.r = 1.0;
+	}
+	//COLOR.rgb = texture(color_texture, UV).rgb;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/color_texture = ExtResource( 2 )
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TestSprite" type="Sprite" parent="."]
+material = SubResource( 2 )
+position = Vector2( 157, 135 )
+scale = Vector2( 58, 58 )
+texture = ExtResource( 1 )

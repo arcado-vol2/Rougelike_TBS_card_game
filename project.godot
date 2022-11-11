@@ -9,50 +9,38 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "AstarPathfinder",
+"language": "GDScript",
+"path": "res://code/structs/astar_pathfinder_4_tilemap.gd"
+}, {
 "base": "Node",
 "class": "Graph",
 "language": "GDScript",
 "path": "res://code/structs/graph.gd"
 }, {
-"base": "Node",
-"class": "ability",
+"base": "KinematicBody2D",
+"class": "Unit",
 "language": "GDScript",
-"path": "res://code/unit_logic/abilities/ability.gd"
+"path": "res://code/units_logic/unit_base.gd"
 }, {
 "base": "Node",
 "class": "math_line",
 "language": "GDScript",
 "path": "res://code/structs/math_line.gd"
-}, {
-"base": "Node",
-"class": "state_machine",
-"language": "GDScript",
-"path": "res://code/unit_logic/state_machine.gd"
-}, {
-"base": "KinematicBody2D",
-"class": "unit",
-"language": "GDScript",
-"path": "res://code/unit_logic/unit.gd"
 } ]
 _global_script_class_icons={
+"AstarPathfinder": "",
 "Graph": "",
-"ability": "",
-"math_line": "",
-"state_machine": "",
-"unit": ""
+"Unit": "",
+"math_line": ""
 }
 
 [application]
 
-config/name="RTS"
-run/main_scene="res://scenes/world/generation_test.tscn"
+config/name="TBS_Roguelike"
+run/main_scene="res://scenes/world/level.tscn"
 config/icon="res://icon.png"
-
-[autoload]
-
-room="*res://code/world_logic/room.gd"
-Unit_global="*res://code/unit_logic/global_unit.gd"
-Save_load_system="*res://code/world_logic/save_load_system.gd"
 
 [display]
 
@@ -60,78 +48,12 @@ window/size/width=720
 window/size/height=405
 window/size/test_width=960
 window/size/test_height=540
-mouse_cursor/custom_image="res://texture/UI/arrow.png"
-mouse_cursor/custom_image_hotspot=Vector2( 9, 9 )
-mouse_cursor/tooltip_position_offset=Vector2( -8, -8 )
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
-[importer_defaults]
+[gui]
 
-texture={
-"compress/bptc_ldr": 0,
-"compress/hdr_mode": 0,
-"compress/lossy_quality": 0.7,
-"compress/mode": 0,
-"compress/normal_map": 0,
-"detect_3d": false,
-"flags/anisotropic": false,
-"flags/filter": false,
-"flags/mipmaps": false,
-"flags/repeat": 0,
-"flags/srgb": 2,
-"process/HDR_as_SRGB": false,
-"process/fix_alpha_border": true,
-"process/invert_color": false,
-"process/normal_map_invert_y": false,
-"process/premult_alpha": false,
-"size_limit": 0,
-"stream": false,
-"svg/scale": 1.0
-}
-
-[input]
-
-right_click={
-"deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
- ]
-}
-F2={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777245,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-atack={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-hold={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-command_queue_key={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-1_ability={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":49,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-2_ability={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":50,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-ui_camera_control={
-"deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
- ]
-}
+common/drop_mouse_on_gui_input_disabled=true
 
 [physics]
 

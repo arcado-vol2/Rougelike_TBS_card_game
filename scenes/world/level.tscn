@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/UI/camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://code/world_logic/level.gd" type="Script" id=2]
+
+[node name="level" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="objects" type="YSort" parent="."]
+
+[node name="units" type="YSort" parent="objects"]
+
+[node name="player" type="YSort" parent="objects/units"]
+
+[node name="enemy" type="YSort" parent="objects/units"]
+
+[node name="Camera2D" parent="." instance=ExtResource( 1 )]
+position = Vector2( 360, 202 )
+
+[editable path="Camera2D"]
