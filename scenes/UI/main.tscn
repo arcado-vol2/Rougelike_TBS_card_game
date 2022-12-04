@@ -1,0 +1,253 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://code/UI_logic/main.gd" type="Script" id=1]
+[ext_resource path="res://code/UI_logic/hand.gd" type="Script" id=2]
+[ext_resource path="res://texture/UI/card_type.png" type="Texture" id=3]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("card_type:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -38, 371 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("hand:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 203, 456 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("hand_substrate:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 468 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "hide_hand"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("hand:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.15, 0.45 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 203, 496 ), Vector2( 203, 800 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("card_type:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.15, 0.2, 0.35 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -38, 371 ), Vector2( -33, 371 ), Vector2( -120, 371 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("hand_substrate:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.15, 0.25, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 468 ), Vector2( 0, 468 ), Vector2( 0, 568 ) ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "fold_a_hand"
+} ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "next"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("card_type:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -42, 371 ), Vector2( -32, 371 ), Vector2( -42, 371 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "prev"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("card_type:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -42, 371 ), Vector2( -32, 371 ), Vector2( -42, 371 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "show_hand"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("hand_substrate:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 568 ), Vector2( 0, 468 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("card_type:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -120, 371 ), Vector2( -20, 371 ), Vector2( -38, 371 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("hand:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 203, 800 ), Vector2( 203, 496 ) ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.25 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "rerange_hand"
+} ]
+}
+
+[node name="main" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Button" type="Button" parent="."]
+margin_right = 12.0
+margin_bottom = 20.0
+text = "draw a card"
+
+[node name="hand_substrate" type="ColorRect" parent="."]
+margin_top = 468.0
+margin_right = 960.0
+margin_bottom = 540.0
+color = Color( 0.168627, 0.192157, 0.25098, 0.584314 )
+
+[node name="hand" type="Control" parent="."]
+margin_left = 203.0
+margin_top = 456.0
+margin_right = 779.0
+margin_bottom = 496.0
+rect_pivot_offset = Vector2( 288, 0 )
+script = ExtResource( 2 )
+dead_zone = -178
+
+[node name="card_type" type="ColorRect" parent="."]
+anchor_right = 2.0
+margin_left = -38.0
+margin_top = 371.0
+margin_right = 67.0
+margin_bottom = 428.0
+color = Color( 0.129412, 0.152941, 0.168627, 1 )
+
+[node name="ColorRect" type="ColorRect" parent="card_type"]
+margin_left = 1.0
+margin_top = 3.0
+margin_right = 102.0
+margin_bottom = 54.0
+color = Color( 0.2175, 0.258583, 0.29, 1 )
+
+[node name="Sprite" type="Sprite" parent="card_type"]
+position = Vector2( 77, 28 )
+texture = ExtResource( 3 )
+hframes = 5
+frame = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/hide_hand = SubResource( 6 )
+anims/next = SubResource( 3 )
+anims/prev = SubResource( 5 )
+anims/show_hand = SubResource( 7 )
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 1.0
+margin_top = 36.0
+margin_right = 110.0
+margin_bottom = 56.0
+text = "fold hand"
+
+[node name="Button3" type="Button" parent="."]
+margin_left = 1.0
+margin_top = 67.0
+margin_right = 120.0
+margin_bottom = 87.0
+text = "return hand back"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]

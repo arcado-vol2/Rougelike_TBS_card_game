@@ -1,0 +1,52 @@
+{
+	"$baseURI": "https://yal.cc/r/20/pixelfont/",
+	"$version": "1.0",
+	"in-glyphs": [
+		"ABCDEFGHIKLMNO:;",
+		"PQRSTUVWXYZ^?()—",
+		"abcdefghiklmno_=",
+		"pqrstuvwxyz[]'|\\",
+		"0123456789<>{}~@",
+		"ё!\"#$%&*+,-./JjЁ",
+		"АБВГДЕЖЗИЙКЛМНОП",
+		"РСТУФХЦЧШЩЪЫЬЭЮЯ",
+		"абвгдежзийклмноп",
+		"рстуфхцчшщъыьэюя",
+		""
+	],
+	"glyph-color": "opaque",
+	"in-kerning": [
+		""
+	],
+	"glyph-width": 11,
+	"glyph-height": 13,
+	"glyph-ofs-x": 1,
+	"glyph-ofs-y": 1,
+	"glyph-sep-x": 1,
+	"glyph-sep-y": 1,
+	"glyph-base-x": 0,
+	"glyph-baseline": 9,
+	"glyph-spacing": 1,
+	"font-is-mono": false,
+	"font-em-square": 320,
+	"font-line-gap": 60,
+	"font-ascend": 0,
+	"font-descend": 0,
+	"font-px-size": 32,
+	"font-name": "Mystery Font",
+	"font-author": "You, of course",
+	"font-copy": "(c)",
+	"font-version": "Version 1.0",
+	"font-desc": "Sweet fonts to leave your worries behind you",
+	"font-license": "You have the permission",
+	"font-license-url": "",
+	"font-sample-text": "Hello!",
+	"font-preview-text": [
+		"",
+		"",
+		"СЪЕШЬ ЕЩЁ ЭТИХ МЯГКИХ ФРАНЦУЗСКИХ БУЛОК, ДА ВЫПЕЙ ЧАЮсъешь ещё этих мягких французских булок, да выпей чаю",
+		"   THE QUICK BROWN FOX JUMPS OVER A LAZY DOG.",
+		"the quick brown fox jumps over a lazy dog.",
+		"0123456789"
+	]
+}
