@@ -43,8 +43,8 @@ func _BSP():
 #	но если не использовать его, а что-то другое так при поворотах будет нет так
 #	красиво, мб просто надо смещать созданую кривую тольшиной 1 вверх, чтобы утолщить,
 #	но я хз насколько это будет быстрее, энивей надо попробовать
-	for y in 100:
-		for x in 100:
+	for y in 300:
+		for x in 300:
 			var t = 0
 			if floor_tilemap.get_cell(x*2, y*2) == 0:
 				t+=1
@@ -56,6 +56,9 @@ func _BSP():
 				t+=1
 			if t>=3:
 				astar_navigation_tilemap.set_cell(x,y,0)
+			if (floor_tilemap.get_cell(x-50,y-50)==-1):
+				wals_tilemap.set_cell(x-50,y-4-50,0)
+	wals_tilemap.update_bitmask_region()
 #	а вот конец
 	
 	_on_create_rooms_generation_complete()
