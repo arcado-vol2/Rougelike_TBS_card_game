@@ -98,9 +98,7 @@ func draw():
 			if canvas[x][y] == 2:
 				Map.set_cell(start.x+x, start.y+y,0)
 			else:
-				Map.set_cell(start.x+x, start.y+y,1)
-				
-				
+				Map.set_cell(start.x+x, start.y+y,-1)
 
 
 
