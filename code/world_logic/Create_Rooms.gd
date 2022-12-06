@@ -12,11 +12,12 @@ var max_size=6
 var Rooms
 export var hspread=400
 export var vspread=400
-var culchance=0.2
+var culchance=0
 var path
 var Map
 var astar_map
 var trimtiles=3
+var rooms_dict = {}
 
 signal generation_complete
 
@@ -38,7 +39,7 @@ func generate():
 
 func _set_cell(x,y, cell = 0):
 	Map.set_cell(x,y, cell)
-	astar_map.set_cell(x,y, 0)
+	astar_map.set_cell(x,y, cell)
 	
 func make_rooms():
 	randomize()
@@ -49,7 +50,7 @@ func make_rooms():
 		var height = min_size + randi() % (max_size-min_size+1) + trimtiles
 		rm.make_room(pos,Vector2(width,height)*tile_size)
 		Rooms.add_child(rm)
-	yield(Rooms.get_tree().create_timer(3), 'timeout')
+	yield(Rooms.get_tree().create_timer(0.2), 'timeout')
 	var room_positions=[]
 	for room in Rooms.get_children():
 		if randf() < culchance:
@@ -59,14 +60,12 @@ func make_rooms():
 			room.mode=RigidBody.MODE_STATIC
 			room.get_child(0).shape=null
 			room_positions.append(room.mapPosition)
+		rooms_dict[room.mapPosition]=room
 		yield(Rooms.get_tree(),'idle_frame')
 	path=BuildingPath_script.find_mst(room_positions)
 
 
 func Make_Map():
-#	for x in range(-200,201):
-#		for y in range(-200,201):
-#			_set_cell(x,y,1)
 	var corridors=[]
 	var ref = funcref(self, "curve_path")
 	BuildingPath_script.drawCorridors(ref,path,Rooms)
@@ -77,53 +76,42 @@ func Make_Map():
 		for x in range(1+trimtiles,st.x*2-trimtiles+1):
 			for y in range(1+trimtiles,st.y*2-trimtiles+1):
 				_set_cell(ul.x+x,ul.y+y)
-#		var p = path.get_closest_point(room.position)
-#		for conn in path.get_point_connections(p):
-#			if not conn in corridors:
-#				var start = Map.world_to_map(path.get_point_position(p))
-#				var end = Map.world_to_map(path.get_point_position(conn))
-#				curve_path(start,end)
-#			corridors.append(p)
 
 func curve_path(start,end):
-	var ch=randi()%2
-	var x_diff = sign(end.x-start.x)
+	var startRoom=rooms_dict.get(start)
+	var endRoom=rooms_dict.get(end)
+	_set_cell(start.x,start.y,1)
+	astar_map.set_cell(start.x,start.y, 0)
+	var x_diff=sign(end.x-start.x)
 	var y_diff=sign(end.y-start.y)
 	if x_diff==0: x_diff=pow(-1,randi()%2)
 	if y_diff==0: y_diff=pow(-1,randi()%2)
+	var maxRoomX=max(startRoom.size.x, endRoom.size.x)/tile_size-trimtiles
+	var maxRoomY=max(startRoom.size.y, endRoom.size.y)/tile_size-trimtiles
+	if(abs(start.x-end.x)>=maxRoomX-2
+	  and abs(start.x-end.x)<=maxRoomX+1):
+		print("adjusted x")
+		print(x_diff)
+		if(x_diff==1):
+			end.x-=endRoom.size.x/tile_size-trimtiles-2
+		elif(x_diff==-1):
+			end.x+=endRoom.size.x/tile_size-trimtiles-1
+	if(abs(start.y-end.y)>=maxRoomY-1
+	  and abs(start.y-end.y)<=maxRoomY+1):
+		print("adjusted y")
+		print(y_diff)
+		if(y_diff==1):
+			start.y+=startRoom.size.y/tile_size-trimtiles-2
+		elif(y_diff==-1):
+			start.y-=startRoom.size.y/tile_size-trimtiles-3
 	var x_y=start
 	var y_x=end
-	if (randi()%2)>0:
-		x_y=end
-		y_x=start
-	for x in range(start.x,end.x,x_diff):
-		_set_cell(x,x_y.y)
-		if ch==0:
+	if(true):
+		print(start.x,"  x  ", end.x, "=",abs(start.x-end.x), "    ", (maxRoomX))
+		print(start.y,"  y  ", end.y, "=",abs(start.y-end.y), "    ", (maxRoomY))
+		for x in range(start.x,end.x,x_diff):
+			_set_cell(x,x_y.y)
 			_set_cell(x,x_y.y+y_diff)
-		else:
-			_set_cell(x,x_y.y-y_diff)
-	for y in range(start.y,end.y,y_diff):
-		_set_cell(y_x.x,y)
-		if ch==0:
+		for y in range(start.y,end.y,y_diff):
+			_set_cell(y_x.x,y)
 			_set_cell(y_x.x+x_diff,y)
-		else:
-			_set_cell(y_x.x-x_diff,y)
-
-#func _process(delta):
-#	update()
-
-#func place_objectives():
-#	var pos
-#	for p in path.get_points():
-#		startroom = path.get_point_position(p)
-#	#var unit1 = unit.instance()
-#	#unit1.position=startroom
-#	#get_tree().current_scene.find_node('YSort').add_child(unit1)
-
-#func _input(event):
-#	if event.is_action_pressed("ui_select"):
-#		Map.clear()
-#		for room in $Rooms.get_children():
-#			room.queue_free()
-#		path=null
-#		generate()

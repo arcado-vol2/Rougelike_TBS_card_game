@@ -55,7 +55,6 @@
 0/z_index = 0
 
 [node name="bunker_tile_set" instance=ExtResource( 3 )]
-location_type = 1
 
 [node name="floor" parent="." index="0"]
 tile_set = SubResource( 1 )
