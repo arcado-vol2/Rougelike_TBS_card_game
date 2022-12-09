@@ -42,6 +42,10 @@ config/name="TBS_Roguelike"
 run/main_scene="res://scenes/UI/main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GLOBAL="res://code/structs/global.gd"
+
 [display]
 
 window/size/width=960

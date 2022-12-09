@@ -26,7 +26,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				zoom_in()
 			if event.button_index == BUTTON_WHEEL_DOWN:
 				zoom_out()
-				
 
 
 func _physics_process(delta: float) -> void:

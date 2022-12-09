@@ -168,17 +168,14 @@ func activate_card(active_type, turn_type):
 		match active_type:
 			#По описанию
 			2:
-				print("описание")
 				methods = card_info[8]
 				methods_vars = card_info[10] 
 			#Спринт
 			0:
-				print("Спринт")
 				methods = ["move"]
 				methods_vars = [[card_info[2]]]
 			#Атака
 			1:
-				print("Атака")
 				methods = ["attack"]
 				methods_vars = [[card_info[1]]]
 	else:

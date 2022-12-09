@@ -9,7 +9,12 @@ lvl_type = "cave_tile_set"
 
 [node name="unit" parent="objects/units/player" index="0" instance=ExtResource( 3 )]
 position = Vector2( 189, 145 )
+z_index = 0
 
 [node name="cave_tile_set" parent="objects" index="1" instance=ExtResource( 2 )]
 
+[node name="floor" parent="objects/cave_tile_set" index="0"]
+tile_data = PoolIntArray( 1114147, 0, 0, 1114148, 0, 0, 1114149, 0, 0, 1114150, 0, 0, 1114151, 0, 0, 1114152, 0, 0, 1114153, 0, 0, 1114154, 0, 0, 1114155, 0, 0, 1114156, 0, 0, 1114157, 0, 0, 1114158, 0, 0, 1114159, 0, 0, 1114160, 0, 0, 1179686, 0, 0, 1179687, 0, 0, 1179688, 0, 0, 1179689, 0, 0, 1179690, 0, 0, 1179691, 0, 0, 1179692, 0, 0, 1179693, 0, 0, 1179694, 0, 0, 1179695, 0, 0, 1179696, 0, 0, 1179697, 0, 0 )
+
+[editable path="objects/cave_tile_set"]
 [editable path="Camera2D"]

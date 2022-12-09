@@ -38,15 +38,3 @@ func select():
 
 func unselect():
 	selected = false
-
-
-
-
-func _on_Button_pressed():
-	$just_4_test/Timer.start(2)
-
-
-
-func _on_Timer_timeout():
-	position = get_global_mouse_position()
-	$just_4_test/Timer.stop()

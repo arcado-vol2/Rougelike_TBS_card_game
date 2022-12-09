@@ -7,6 +7,8 @@ export var card_scale = 0.4
 onready var hand_node = $hand
 onready var ap = $AnimationPlayer
 onready var active_type_sprite = $card_type/Sprite
+onready var level = $ViewportContainer/Viewport/level
+
 var current_hand = []
 var current_deck = ["template","br_156","br_156","br_156", "adaptiv_sheald", "adaptiv_sheald", "adaptiv_sheald", "boots_dr1", "boots_dr1", "boots_dr1"]
 var hand_angle = deg2rad(20)
@@ -42,7 +44,7 @@ func _physics_process(delta):
 			rerange_frames = 0
 			set_physics_process(false)
 
-func _input(event):
+func _unhandled_input(event):
 	#пока не свяжу с основным будет 3, а так должно быть 5
 	if event.is_action_pressed("next_card_type"):
 		ap.play("next")
@@ -123,6 +125,10 @@ func trow_a_card(card_i, metods, metods_vars):
 	rerange_flag = true
 	set_physics_process(true)
 	print(metods, metods_vars)
+	var t_q = []
+	for i in metods.size():
+		t_q.append([metods[i], metods_vars[i]])
+	level.start_action(t_q)
 
 func fold_a_hand():
 	var center = hand_center.x
