@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://code/units_logic/unit_base.gd" type="Script" id=1]
+[ext_resource path="res://scenes/units/stats.tscn" type="PackedScene" id=2]
+[ext_resource path="res://texture/units/target.png" type="Texture" id=3]
 
 [node name="unit" type="KinematicBody2D"]
 z_index = 10
@@ -28,4 +30,24 @@ centered = false
 
 [node name="jacket" type="Sprite" parent="."]
 
+[node name="stats" parent="." instance=ExtResource( 2 )]
+
+[node name="ruler" type="RayCast2D" parent="."]
+enabled = true
+collision_mask = 2
+
+[node name="target_ico" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 3 )
+
+[node name="click_area" type="TextureButton" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="health_bar" type="ProgressBar" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+
 [connection signal="input_event" from="." to="." method="_handle_input_event"]
+[connection signal="pressed" from="click_area" to="." method="_on_click_area_pressed"]

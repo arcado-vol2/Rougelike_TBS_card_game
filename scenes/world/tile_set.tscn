@@ -5,7 +5,6 @@
 [ext_resource path="res://code/world_logic/lvl_generator_cave.gd" type="Script" id=3]
 [ext_resource path="res://code/world_logic/Create_Rooms.gd" type="Script" id=4]
 
-
 [sub_resource type="TileSet" id=1]
 0/name = "missing_cell.png 0"
 0/texture = ExtResource( 2 )

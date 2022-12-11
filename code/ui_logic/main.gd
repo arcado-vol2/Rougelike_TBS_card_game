@@ -26,6 +26,7 @@ var active_type = 2
 var rerange_flag = false
 var rerange_frames = 0
 
+
 func _ready():
 	set_physics_process(false)
 	hand_center = Vector2(hand_node.get_rect().size.x/2, 0)
@@ -45,6 +46,7 @@ func _physics_process(delta):
 			set_physics_process(false)
 
 func _unhandled_input(event):
+	$ViewportContainer/Viewport.input(event)
 	#пока не свяжу с основным будет 3, а так должно быть 5
 	if event.is_action_pressed("next_card_type"):
 		ap.play("next")
@@ -138,9 +140,11 @@ func fold_a_hand():
 func hide_a_hand():
 	ap.play("hide_hand")
 
+func show_a_hand():
+	ap.play("show_hand")
 func _on_Button2_pressed():
 	hide_a_hand()
 
 
 func _on_Button3_pressed():
-	ap.play("show_hand")
+	show_a_hand()

@@ -177,7 +177,7 @@ func activate_card(active_type, turn_type):
 			#Атака
 			1:
 				methods = ["attack"]
-				methods_vars = [[card_info[1]]]
+				methods_vars = [card_info[1]]
 	else:
 		match active_type:
 			#По описанию

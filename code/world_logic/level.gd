@@ -27,26 +27,25 @@ var current_play_unit_index = 0
 var possible_cels: PoolVector2Array
 
 onready var turn_label = get_node("../../../hand_substrate/turn/text")
-onready var action_q_label = get_node("../../../hand_substrate/action_queue/text")
-onready var ap = get_node("../../../AnimationPlayer")
-
+onready var action_q_label = get_node("../../../action_queue/text")
+onready var action_q_ap = get_node("../../../action_queue/AnimationPlayer")
+onready var parent = get_node("../../..")
 export var lvl_type: String
 
 var action_queue = []
 var action_i = 0
 
-var move_rad = 0
-
+var rad = 0
+var damage = 0
 func start():
 	path_finder = AstarPathfinder.new(get_node("objects/{}/astar_nav_mesh".format([lvl_type], "{}")))
 	player_units = $objects/units/player.get_children()
 	possible_tiles = get_node("objects/{}/possible_tiles".format([lvl_type], "{}"))
-	
+	enemy_units = $objects/units/enemy.get_children()
 	for unit in player_units:
 		unit.connect("movement_done", self, "move")
-		
-	
-
+	for unit in enemy_units:
+		unit.connect("clicked", self, "applay_damage")
 
 func _show_possible_tiles(radius):
 	if radius>1:
@@ -57,16 +56,12 @@ func _show_possible_tiles(radius):
 func _hide_possible_tiles():
 	possible_tiles.clear()
 
-
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_up"):
 		#для тестов
-		player_units[0].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(32,32)
-		#
-	
-	if event.is_action_pressed("ui_home") and current_state == game_states.BATTLE:
-		player_units[current_play_unit_index].set_path([player_units[current_play_unit_index].position])
-		_show_possible_tiles(30)
+		player_units[0].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(24,24)
+		enemy_units[0].position = player_units[0].position + Vector2(48,48)
+
 	if event is InputEventMouseButton:
 		match current_state:
 			game_states.WANDERING:
@@ -79,46 +74,76 @@ func _unhandled_input(event):
 					match current_event:
 						events.move:
 							_hide_possible_tiles()
-							var t = get_global_mouse_position()
+							var t = make_input_local(event).position
 							if path_finder.ground_tile_map.world_to_map(t) in possible_cels:
 								var tmp = path_finder.get_move_path(player_units[current_play_unit_index].position,t)
 								player_units[current_play_unit_index].set_path(tmp)
-								if tmp.size()-1 < move_rad:
-									move_rad -= (tmp.size()-1)
+								if tmp.size()-1 < rad:
+									rad -= (tmp.size()-1)
 							else:
 								move()
-						events.attack:
-							next_action()
-		
 
 func move(r = null):
 	if r!=null:
-		move_rad = r[0]+1
-	if move_rad == 1 and current_battle_state == battle_states.player_point:
+		rad = r[0]+1
+	if rad == 1 and current_battle_state == battle_states.player_point:
 		next_action()
-	_show_possible_tiles(move_rad)
-
+		return
+	_show_possible_tiles(rad)
 
 func attack(in_vars):
-	var rad = in_vars[0]
-	var damage = in_vars[1]
-	print(rad," " ,damage)
+	rad = in_vars[0]
+	damage = in_vars[1]
+	if possible_targets(rad, true) == 0:
+		next_action()
+		return
+
+func applay_damage(unit):
+	unit.take_damage(damage)
+	possible_targets(rad, false)
+	next_action()
+
+func closer(a, b):
+	if a.position.distance_to(player_units[current_play_unit_index].position) < b.position.distance_to(player_units[current_play_unit_index].position):
+		return true
+	return false
+
+func possible_targets(rad, show):
+	if enemy_units.size()==0:
+		return 0
+	enemy_units.sort_custom(self, "closer")
+	var curr_rad = rad *16
+	var amount = 0
+	for u in enemy_units:
+		if u.position.distance_to(player_units[current_play_unit_index].position) > curr_rad:
+			break
+		if show:
+			u.in_danger()
+			amount +=1
+		else:
+			u.no_longer_in_danger()
+	return amount
 
 func start_action(in_q):
 	if current_state == game_states.BATTLE:
 		action_i = 0
-		ap.play("show_queue")
+		action_q_ap.play("show_queue")
 		action_queue = in_q
 		current_battle_state = battle_states.player_point
+		parent.hide_a_hand()
 		call_action()
 
 func next_action():
-	ap.play("next_queue")
+	action_q_ap.play("next_queue")
 	action_i+=1
 	call_action()
 
 func call_action():
+	_hide_possible_tiles()
+	possible_targets(rad, false)
 	if action_i < action_queue.size():
+		rad = 0 
+		damage = 0
 		action_q_label.text = action_queue[action_i][0]
 		match action_queue[action_i][0]:
 			"move":
@@ -128,4 +153,9 @@ func call_action():
 		call(action_queue[action_i][0], action_queue[action_i][1])
 	else:
 		current_event = events.none
-		ap.play("hide_queue")
+		action_q_ap.play("hide_queue")
+		parent.show_a_hand()
+
+
+func _on_skip_pressed():
+	next_action()
