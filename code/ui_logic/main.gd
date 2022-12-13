@@ -8,9 +8,10 @@ onready var hand_node = $hand
 onready var ap = $AnimationPlayer
 onready var active_type_sprite = $card_type/Sprite
 onready var level = $ViewportContainer/Viewport/level
+onready var end_turn_timer = $end_turn_timer
 
 var current_hand = []
-var current_deck = ["template","br_156","br_156","br_156", "adaptiv_sheald", "adaptiv_sheald", "adaptiv_sheald", "boots_dr1", "boots_dr1", "boots_dr1"]
+var current_deck = []
 var hand_angle = deg2rad(20)
 var radius
 var hand_center
@@ -19,7 +20,7 @@ var max_y
 var max_hand_size = 10
 
 var active_type = 2
-
+var action_type = 0
 #Я ебал в рот этого годота, для безопастности мы удаляем объект на следующем кадре, но сука следующий кадр
 #это не следующий кадр, а кадр после него, вот и приходится чудить
 #но с другой стороны, это чисто моя шиза 
@@ -27,6 +28,12 @@ var rerange_flag = false
 var rerange_frames = 0
 
 
+#Метод восстановления руки при смене выбранного юнита
+func restore_hand(hand):
+	current_hand = []
+	draw_a_card(hand.size(), hand)
+
+#Задаём начальные параметры для расчёта руки
 func _ready():
 	set_physics_process(false)
 	hand_center = Vector2(hand_node.get_rect().size.x/2, 0)
@@ -34,8 +41,8 @@ func _ready():
 	radius = (hand_node.get_rect().size.x * sin((PI - hand_angle)/2))/sin(hand_angle)
 	hand_center.y = - sqrt(pow(radius,2) - pow(hand_center.x,2))
 	max_y = max(sqrt(pow(radius,2)) + hand_center.y, -sqrt(pow(radius,2)) + hand_center.y)
-	draw_a_card(1)
-
+	
+#Существует лишь потому что у движка есть особенность обработки удаления обхектов
 func _physics_process(delta):
 	if rerange_flag:
 		rerange_frames+=1
@@ -45,9 +52,10 @@ func _physics_process(delta):
 			rerange_frames = 0
 			set_physics_process(false)
 
+#Обработка событий клавиатуры
 func _unhandled_input(event):
 	$ViewportContainer/Viewport.input(event)
-	#пока не свяжу с основным будет 3, а так должно быть 5
+	#Изменение типа активации карты
 	if event.is_action_pressed("next_card_type"):
 		ap.play("next")
 		active_type = (active_type + 1) % 3
@@ -59,18 +67,25 @@ func _unhandled_input(event):
 		active_type = active_type % 3 if active_type>=0 else 3 + active_type % 3 
 		active_type_sprite.frame = active_type
 		change_active_type()
-		
+	if active_type!= 0:
+		action_type = -1
+	update_action()
+
+#функция для изменения типа активации для всех карт в руке
 func change_active_type():
 	for card in hand_node.get_children():
 		card.update_active_type(active_type)
-		
 
-func draw_a_card(count = 1, card = null):
+#добор карты
+func draw_a_card(count = 1, deck = null, card = null ):
+	print(deck)
 	if card != null:
 		return
+	if deck == null:
+		deck = current_deck
 	for card in count:
-		if current_deck.size() >=1 and current_hand.size()+1 <= max_hand_size:
-			current_hand.append(current_deck.pop_front())
+		if deck.size() >=1 and current_hand.size()+1 <= max_hand_size:
+			current_hand.append(deck.pop_front())
 			var tmp_card = card_base.instance()
 			tmp_card.scale = Vector2(card_scale,card_scale)
 			tmp_card.real_card_name = current_hand.back()
@@ -94,6 +109,10 @@ func rerange_hand():
 	if one_offset >= 94:
 		shear = 0.2
 	for card_i in hand_by_node.size():
+		if hand_by_node[card_i].get_card_type() != action_type or action_type==-1:
+			hand_by_node[card_i].disactivate()
+		else:
+			hand_by_node[card_i].activate()
 		var target_position = Vector2.ZERO
 		if hand_node.focused_i!=-1:
 			if card_i < hand_node.focused_i:
@@ -113,6 +132,14 @@ func rerange_hand():
 		hand_by_node[card_i].set_target_pos(target_position)
 		hand_by_node[card_i].save_hand_parameters()
 
+func update_action():
+	for card in hand_node.get_children():
+		if action_type == -1:
+			card.activate()
+		elif card.get_card_type() != action_type:
+			card.disactivate()
+
+
 func _on_Button_pressed():
 	#call("draw_a_card") чтобы блять не забыть
 	draw_a_card()
@@ -130,6 +157,7 @@ func trow_a_card(card_i, metods, metods_vars):
 	var t_q = []
 	for i in metods.size():
 		t_q.append([metods[i], metods_vars[i]])
+	
 	level.start_action(t_q)
 
 func fold_a_hand():
@@ -142,9 +170,14 @@ func hide_a_hand():
 
 func show_a_hand():
 	ap.play("show_hand")
-func _on_Button2_pressed():
+
+func _on_end_turn_pressed():
 	hide_a_hand()
+	end_turn_timer.start()
 
-
-func _on_Button3_pressed():
+func _on_end_turn_timer_timeout():
+	for i in hand_node.get_children():
+		i.queue_free()
+	restore_hand(current_hand)
 	show_a_hand()
+

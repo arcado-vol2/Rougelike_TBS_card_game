@@ -44,6 +44,10 @@ func start():
 	enemy_units = $objects/units/enemy.get_children()
 	for unit in player_units:
 		unit.connect("movement_done", self, "move")
+		unit.unselect()
+	player_units[0].select()
+	parent.current_hand = player_units[0].get_child(0).get_hand()
+	parent.current_deck = player_units[0].get_child(0).get_deck()
 	for unit in enemy_units:
 		unit.connect("clicked", self, "applay_damage")
 
@@ -53,6 +57,12 @@ func _show_possible_tiles(radius):
 		for point in possible_cels:
 			possible_tiles.set_cellv(point, 0)
 
+func _show_possible_tiles_4_attack(radius):
+	if radius>1:
+		possible_cels = path_finder.get_points_in_radius(player_units[current_play_unit_index].position, radius, true)
+		for point in possible_cels:
+			possible_tiles.set_cellv(point, 1)
+			
 func _hide_possible_tiles():
 	possible_tiles.clear()
 
@@ -60,7 +70,9 @@ func _unhandled_input(event):
 	if event.is_action_pressed("ui_up"):
 		#для тестов
 		player_units[0].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(24,24)
+		player_units[1].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(48,24)
 		enemy_units[0].position = player_units[0].position + Vector2(48,48)
+		enemy_units[1].position = player_units[0].position + Vector2(48,48)
 
 	if event is InputEventMouseButton:
 		match current_state:
@@ -94,6 +106,7 @@ func move(r = null):
 func attack(in_vars):
 	rad = in_vars[0]
 	damage = in_vars[1]
+	_show_possible_tiles_4_attack(rad)
 	if possible_targets(rad, true) == 0:
 		next_action()
 		return
@@ -134,13 +147,12 @@ func start_action(in_q):
 		call_action()
 
 func next_action():
+	_hide_possible_tiles()
 	action_q_ap.play("next_queue")
 	action_i+=1
 	call_action()
 
 func call_action():
-	_hide_possible_tiles()
-	possible_targets(rad, false)
 	if action_i < action_queue.size():
 		rad = 0 
 		damage = 0
@@ -159,3 +171,14 @@ func call_action():
 
 func _on_skip_pressed():
 	next_action()
+
+
+func _on_end_turn_pressed():
+	player_units[current_play_unit_index].unselect()
+	player_units[current_play_unit_index].get_child(0).save_hand(parent.current_hand)
+	player_units[current_play_unit_index].get_child(0).save_deck(parent.current_deck)
+	current_play_unit_index = (current_play_unit_index + 1) % player_units.size()
+	player_units[current_play_unit_index].select()
+	parent.current_hand = player_units[current_play_unit_index].get_child(0).get_hand()
+	parent.current_deck = player_units[current_play_unit_index].get_child(0).get_deck()
+

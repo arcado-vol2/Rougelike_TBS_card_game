@@ -48,7 +48,7 @@ func get_closest_grid_position(to: Vector2) -> Vector2:
 
 
 # Возвращает массив всех соседних точек в определенном радиусе
-func get_points_in_radius(point: Vector2, radius: int) -> PoolVector2Array:
+func get_points_in_radius(point: Vector2, radius: int, diogonals = false) -> PoolVector2Array:
 	var points = PoolVector2Array()
 	var tile_map_cell = ground_tile_map.world_to_map(point)
 	var TILE_ADJ = ground_tile_map.cell_size / 2
@@ -67,6 +67,13 @@ func get_points_in_radius(point: Vector2, radius: int) -> PoolVector2Array:
 				Vector2(cell_to_open.x + 1, cell_to_open.y),
 				Vector2(cell_to_open.x, cell_to_open.y + 1)
 			]
+			if diogonals:
+				neighbour_cells.append_array([
+					Vector2(cell_to_open.x + 1, cell_to_open.y - 1),
+					Vector2(cell_to_open.x + 1, cell_to_open.y + 1 ),
+					Vector2(cell_to_open.x - 1, cell_to_open.y - 1),
+					Vector2(cell_to_open.x - 1, cell_to_open.y + 1 ),
+				])
 			new_candidates.append_array(neighbour_cells)
 			opened_cells[cell_to_open] = true
 			points.append(cell_to_open) #.map_to_world(cell_to_open) + TILE_ADJ

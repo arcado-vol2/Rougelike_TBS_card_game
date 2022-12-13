@@ -170,7 +170,7 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 48, 0, 48 )
 0/autotile/occluder_map = [  ]
 0/autotile/navpoly_map = [  ]
 0/autotile/priority_map = [  ]
-0/autotile/z_index_map = [  ]
+0/autotile/z_index_map = [ Vector3( 0, 1, 20 ), Vector3( 1, 0, 20 ), Vector3( 1, 1, 20 ), Vector3( 2, 1, 20 ), Vector3( 3, 0, 20 ) ]
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
@@ -449,3 +449,4 @@ collision_mask = 0
 
 [node name="possible_tiles" parent="." index="3"]
 modulate = Color( 1, 1, 1, 0.556863 )
+z_index = 30

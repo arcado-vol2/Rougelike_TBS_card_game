@@ -44,9 +44,11 @@ func _move_along_path(delta: float):
 		path.remove(0)
 		
 func select():
+	$selected.visible = true
 	selected = true
 
 func unselect():
+	$selected.visible = false
 	selected = false
 
 func in_danger():
@@ -71,11 +73,9 @@ func check_the_wals(target, radius):
 	ruler.cast_to.y = tmp.y
 	return not ruler.is_colliding()
 
-func take_damage(amount):
-	prints(amount, "кол-ва урона")
+func take_damage(amount): 
 	stats.health -= amount
 	health_bar.value = stats.health
-
 
 func _on_click_area_pressed():
 	emit_signal("clicked", self)

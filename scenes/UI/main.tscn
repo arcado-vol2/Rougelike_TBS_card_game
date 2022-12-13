@@ -323,6 +323,8 @@ size = Vector2( 960, 540 )
 handle_input_locally = false
 render_target_update_mode = 3
 
+[node name="turn_controller" type="Node" parent="ViewportContainer/Viewport"]
+
 [node name="level" parent="ViewportContainer/Viewport" instance=ExtResource( 4 )]
 
 [node name="Button" type="Button" parent="."]
@@ -423,21 +425,25 @@ anims/prev = SubResource( 5 )
 anims/show_hand = SubResource( 7 )
 anims/show_queue = SubResource( 9 )
 
-[node name="Button2" type="Button" parent="."]
-margin_left = 1.0
-margin_top = 36.0
-margin_right = 110.0
-margin_bottom = 56.0
-text = "fold hand"
+[node name="end_turn" type="Button" parent="."]
+margin_left = 862.0
+margin_right = 960.0
+margin_bottom = 26.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = ExtResource( 6 )
+custom_styles/hover = SubResource( 16 )
+custom_styles/pressed = SubResource( 17 )
+custom_styles/focus = SubResource( 18 )
+custom_styles/disabled = SubResource( 19 )
+custom_styles/normal = SubResource( 15 )
+text = "end turn"
 
-[node name="Button3" type="Button" parent="."]
-margin_left = 1.0
-margin_top = 67.0
-margin_right = 120.0
-margin_bottom = 87.0
-text = "return hand back"
+[node name="end_turn_timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
 
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="action_queue/skip" to="ViewportContainer/Viewport/level" method="_on_skip_pressed"]
-[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
-[connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]
+[connection signal="pressed" from="end_turn" to="." method="_on_end_turn_pressed"]
+[connection signal="pressed" from="end_turn" to="ViewportContainer/Viewport/level" method="_on_end_turn_pressed"]
+[connection signal="timeout" from="end_turn_timer" to="." method="_on_end_turn_timer_timeout"]

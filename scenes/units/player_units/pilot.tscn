@@ -13,31 +13,35 @@ collision_mask = 0
 [node name="CollisionShape2D" parent="." index="0"]
 one_way_collision_margin = 0.0
 
-[node name="body" parent="." index="1"]
+[node name="selected" parent="." index="1"]
+visible = true
+position = Vector2( -1, 1 )
+
+[node name="body" parent="." index="2"]
 position = Vector2( -9, -18 )
 texture = ExtResource( 3 )
 
-[node name="head" parent="." index="2"]
+[node name="head" parent="." index="3"]
 use_parent_material = false
 position = Vector2( -8, -27 )
 texture = ExtResource( 2 )
 
-[node name="hand_main" parent="." index="3"]
+[node name="hand_main" parent="." index="4"]
 position = Vector2( -23, -20 )
 texture = ExtResource( 5 )
 
-[node name="hand_second" parent="." index="4"]
+[node name="hand_second" parent="." index="5"]
 position = Vector2( 7, -9 )
 texture = ExtResource( 4 )
 
-[node name="hat" parent="." index="5"]
+[node name="hat" parent="." index="6"]
 position = Vector2( -2, -8 )
 
-[node name="jacket" parent="." index="6"]
+[node name="jacket" parent="." index="7"]
 position = Vector2( -2, -8 )
 
-[node name="target_ico" parent="." index="9"]
+[node name="target_ico" parent="." index="10"]
 position = Vector2( 0, -38 )
 
-[node name="health_bar" parent="." index="11"]
+[node name="health_bar" parent="." index="12"]
 visible = false

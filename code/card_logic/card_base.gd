@@ -18,6 +18,9 @@ onready var reaction_block = $CardBase/bars/discription/reaction
 
 export var real_card_name = "template"
 
+var active = true
+var card_type
+
 var animate = false
 var max_y
 
@@ -52,6 +55,7 @@ func _ready():
 	card_size = $CardBase.get_rect().size + Vector2(4,4)
 	card_info = card_db.DATA[card_db.get(real_card_name)]
 	icon.frame = card_info[0]
+	card_type = card_info[0]
 	attack.text = str(card_info[1][0]) + "/" + str(card_info[1][1])
 	speed.text = str(card_info[2])
 	defence.text = str(card_info[3])
@@ -66,7 +70,18 @@ func _ready():
 		separation_bar.visible = false
 		reaction_block.visible = false
 	reaction.text = str(card_info[7])
-	
+
+func disactivate():
+	active = false
+	$Sprite.modulate = Color("0b171f")
+
+func activate():
+	active = true
+	$Sprite.modulate = Color.white
+
+func get_card_type():
+	return card_type
+
 func set_position_in_hand(pos):
 	position_in_hand = pos
 
@@ -116,7 +131,7 @@ func _physics_process(delta):
 
 
 func _on_focus_mouse_entered():
-	if not animate:
+	if not animate and active:
 		z_index = 1
 		set_target_size(Vector2.ONE)
 		set_target_angle(0)
@@ -146,9 +161,10 @@ func reset_to_hand_pos():
 
 
 func _on_focus_button_down():
-	state = in_mouse
-	set_target_size(Vector2(0.4,0.4))
-	set_target_angle(0)
+	if active:
+		state = in_mouse
+		set_target_size(Vector2(0.4,0.4))
+		set_target_angle(0)
 
 
 func _on_focus_button_up():

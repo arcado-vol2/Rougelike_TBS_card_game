@@ -12,6 +12,9 @@ lvl_type = "bunker_tile_set"
 [node name="unit" parent="objects/units/player" index="0" instance=ExtResource( 3 )]
 position = Vector2( 150, 126 )
 
+[node name="unit2" parent="objects/units/player" index="1" instance=ExtResource( 3 )]
+position = Vector2( 94, 117 )
+
 [node name="unit" parent="objects/units/enemy" index="0" instance=ExtResource( 5 )]
 
 [node name="unit2" parent="objects/units/enemy" index="1" instance=ExtResource( 5 )]
