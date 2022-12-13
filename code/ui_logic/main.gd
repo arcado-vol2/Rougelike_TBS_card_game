@@ -8,7 +8,6 @@ onready var hand_node = $hand
 onready var ap = $AnimationPlayer
 onready var active_type_sprite = $card_type/Sprite
 onready var level = $ViewportContainer/Viewport/level
-onready var end_turn_timer = $end_turn_timer
 
 var current_hand = []
 var current_deck = []
@@ -69,7 +68,6 @@ func _unhandled_input(event):
 		change_active_type()
 	if active_type!= 0:
 		action_type = -1
-	update_action()
 
 #функция для изменения типа активации для всех карт в руке
 func change_active_type():
@@ -109,10 +107,6 @@ func rerange_hand():
 	if one_offset >= 94:
 		shear = 0.2
 	for card_i in hand_by_node.size():
-		if hand_by_node[card_i].get_card_type() != action_type or action_type==-1:
-			hand_by_node[card_i].disactivate()
-		else:
-			hand_by_node[card_i].activate()
 		var target_position = Vector2.ZERO
 		if hand_node.focused_i!=-1:
 			if card_i < hand_node.focused_i:
@@ -132,12 +126,6 @@ func rerange_hand():
 		hand_by_node[card_i].set_target_pos(target_position)
 		hand_by_node[card_i].save_hand_parameters()
 
-func update_action():
-	for card in hand_node.get_children():
-		if action_type == -1:
-			card.activate()
-		elif card.get_card_type() != action_type:
-			card.disactivate()
 
 
 func _on_Button_pressed():
@@ -171,13 +159,4 @@ func hide_a_hand():
 func show_a_hand():
 	ap.play("show_hand")
 
-func _on_end_turn_pressed():
-	hide_a_hand()
-	end_turn_timer.start()
-
-func _on_end_turn_timer_timeout():
-	for i in hand_node.get_children():
-		i.queue_free()
-	restore_hand(current_hand)
-	show_a_hand()
 

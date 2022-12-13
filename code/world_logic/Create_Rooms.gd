@@ -90,16 +90,12 @@ func curve_path(start,end):
 	var maxRoomY=max(startRoom.size.y, endRoom.size.y)/tile_size-trimtiles
 	if(abs(start.x-end.x)>=maxRoomX-2
 	  and abs(start.x-end.x)<=maxRoomX+1):
-		print("adjusted x")
-		print(x_diff)
 		if(x_diff==1):
 			end.x-=endRoom.size.x/tile_size-trimtiles-2
 		elif(x_diff==-1):
 			end.x+=endRoom.size.x/tile_size-trimtiles-1
 	if(abs(start.y-end.y)>=maxRoomY-1
 	  and abs(start.y-end.y)<=maxRoomY+1):
-		print("adjusted y")
-		print(y_diff)
 		if(y_diff==1):
 			start.y+=startRoom.size.y/tile_size-trimtiles-2
 		elif(y_diff==-1):
@@ -107,8 +103,6 @@ func curve_path(start,end):
 	var x_y=start
 	var y_x=end
 	if(true):
-		print(start.x,"  x  ", end.x, "=",abs(start.x-end.x), "    ", (maxRoomX))
-		print(start.y,"  y  ", end.y, "=",abs(start.y-end.y), "    ", (maxRoomY))
 		for x in range(start.x,end.x,x_diff):
 			_set_cell(x,x_y.y)
 			_set_cell(x,x_y.y+y_diff)

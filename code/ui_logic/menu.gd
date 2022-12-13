@@ -1,8 +1,6 @@
 extends Node
 
 
-func _ready():
-	print(13)
 func _on_play_button_pressed():
 	get_tree().change_scene("res://scenes/world/main.tscn")
 

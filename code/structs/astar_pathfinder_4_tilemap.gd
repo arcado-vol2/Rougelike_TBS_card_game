@@ -51,7 +51,6 @@ func get_closest_grid_position(to: Vector2) -> Vector2:
 func get_points_in_radius(point: Vector2, radius: int, diogonals = false) -> PoolVector2Array:
 	var points = PoolVector2Array()
 	var tile_map_cell = ground_tile_map.world_to_map(point)
-	var TILE_ADJ = ground_tile_map.cell_size / 2
 	
 	var opened_cells = Dictionary()
 	var cells_to_open = [tile_map_cell]
@@ -76,7 +75,7 @@ func get_points_in_radius(point: Vector2, radius: int, diogonals = false) -> Poo
 				])
 			new_candidates.append_array(neighbour_cells)
 			opened_cells[cell_to_open] = true
-			points.append(cell_to_open) #.map_to_world(cell_to_open) + TILE_ADJ
+			points.append(cell_to_open)
 		cells_to_open = new_candidates
 	return points
 

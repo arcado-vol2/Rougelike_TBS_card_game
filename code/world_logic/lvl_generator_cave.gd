@@ -87,5 +87,4 @@ func get_prefabs():
 
 func _on_create_rooms_generation_complete():
 	placeStart()
-	print(path.get_closest_point(startRoom.mapPosition))
 	get_parent().get_parent().start()

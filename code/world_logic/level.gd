@@ -15,7 +15,7 @@ enum events {
 	move,
 	attack
 }
-var current_state = game_states.BATTLE
+var current_state = game_states.WANDERING
 var current_battle_state = battle_states.player_choice
 var current_event = events.none
 

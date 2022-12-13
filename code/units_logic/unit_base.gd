@@ -8,6 +8,7 @@ const SPEED := 80.0
 
 export var move_points := 4
 export var cell_size = 16
+export var unit_name = ""
 
 onready var ruler = $ruler
 onready var stats = $stats
