@@ -3,7 +3,7 @@
 [ext_resource path="res://code/UI_logic/main.gd" type="Script" id=1]
 [ext_resource path="res://code/UI_logic/hand.gd" type="Script" id=2]
 [ext_resource path="res://texture/UI/card_type.png" type="Texture" id=3]
-[ext_resource path="res://_dev_tools/astar_test/testing_level_bunker.tscn" type="PackedScene" id=4]
+[ext_resource path="res://_dev_tools/astar_test/testing_level_cave.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/UI/queue_text.tscn" type="PackedScene" id=5]
 [ext_resource path="res://texture/fonts/main_font_godot_file.tres" type="DynamicFont" id=6]
 [ext_resource path="res://code/global/turn_controller.gd" type="Script" id=7]
@@ -327,10 +327,7 @@ render_target_update_mode = 3
 [node name="level" parent="ViewportContainer/Viewport" instance=ExtResource( 4 )]
 
 [node name="unit" parent="ViewportContainer/Viewport/level/objects/units/player" index="0"]
-tile_set_type = "bunker_tile_set"
-
-[node name="unit2" parent="ViewportContainer/Viewport/level/objects/units/player" index="1"]
-tile_set_type = "bunker_tile_set"
+tile_set_type = "cave_tile_set"
 
 [node name="turn_controller" type="Node" parent="ViewportContainer/Viewport"]
 script = ExtResource( 7 )
@@ -436,5 +433,5 @@ anims/show_queue = SubResource( 9 )
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 
 [editable path="ViewportContainer/Viewport/level"]
-[editable path="ViewportContainer/Viewport/level/objects/bunker_tile_set"]
+[editable path="ViewportContainer/Viewport/level/objects/cave_tile_set"]
 [editable path="ViewportContainer/Viewport/level/Camera2D"]

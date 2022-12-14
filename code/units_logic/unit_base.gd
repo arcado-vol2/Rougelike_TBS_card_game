@@ -9,9 +9,12 @@ const SPEED := 80.0
 export var move_points := 4
 export var cell_size = 16
 export var unit_name = ""
+export var tile_set_type: String
 
 onready var ruler = $ruler
 onready var stats = $stats
+onready var wals_tilemap = get_node("/root/main/ViewportContainer/Viewport/level/objects/{}/wals".format([tile_set_type], "{}"))
+onready var fow_tilemap = get_node("/root/main/ViewportContainer/Viewport/level/objects/{}/fogOfWar".format([tile_set_type], "{}"))
 onready var health_bar = $health_bar
 
 var path := PoolVector2Array([])
@@ -41,6 +44,7 @@ func set_path(_path: PoolVector2Array):
 func _move_along_path(delta: float):
 	print("method")
 	var distance = SPEED * delta
+	var space_state = get_world_2d().direct_space_state
 	for i in range(path.size()):
 		
 		var next_point = path[0]
@@ -55,8 +59,18 @@ func _move_along_path(delta: float):
 		move_and_slide(position.direction_to(next_point).normalized() * SPEED)
 		
 		path.remove(0)
-		
-		
+    var unit_tile_position = position/fow_tilemap.cell_size.x
+    for x in range(unit_tile_position.x-10, unit_tile_position.x+11):
+      for y in range(unit_tile_position.y-10, unit_tile_position.y+11):
+        if fow_tilemap.get_cell(x,y)==0:
+          var tile_position = wals_tilemap.world_to_map(position)
+          var x_dir = 1 if  x < tile_position.x else -1
+          var y_dir = 1 if  y < tile_position.y else -1
+          var test_point1 = fow_tilemap.map_to_world(Vector2(x,y))
+          var occlusion1 = space_state.intersect_ray(position, test_point1)
+          if !occlusion1 ||  (occlusion1.position - test_point1).length() < 25 :
+            fow_tilemap.set_cell(x,y,-1) 
+
 func select():
 	$selected.visible = true
 	selected = true

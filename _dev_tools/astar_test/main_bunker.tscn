@@ -434,6 +434,7 @@ anims/show_hand = SubResource( 7 )
 anims/show_queue = SubResource( 9 )
 
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="action_queue/skip" to="ViewportContainer/Viewport/level" method="_on_skip_pressed"]
 
 [editable path="ViewportContainer/Viewport/level"]
 [editable path="ViewportContainer/Viewport/level/objects/bunker_tile_set"]

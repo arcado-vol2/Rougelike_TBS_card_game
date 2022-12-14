@@ -170,13 +170,6 @@ func call_action():
 func _on_skip_pressed():
 	next_action()
 
-
-func _on_end_turn_pressed():
-	player_units[current_play_unit_index].unselect()
-	player_units[current_play_unit_index].get_child(0).save_hand(parent.current_hand)
-	player_units[current_play_unit_index].get_child(0).save_deck(parent.current_deck)
-	current_play_unit_index = (current_play_unit_index + 1) % player_units.size()
-	player_units[current_play_unit_index].select()
-	parent.current_hand = player_units[current_play_unit_index].get_child(0).get_hand()
-	parent.current_deck = player_units[current_play_unit_index].get_child(0).get_deck()
+func get_current_unit():
+	return player_units[current_play_unit_index]
 
