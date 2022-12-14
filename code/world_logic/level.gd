@@ -71,9 +71,6 @@ func _unhandled_input(event):
 	if event.is_action_pressed("ui_up"):
 		#для тестов
 		player_units[0].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(24,24)
-		player_units[1].position = $objects/bunker_tile_set/floor.map_to_world($objects/bunker_tile_set/floor.get_used_cells()[0])+ Vector2(48,24)
-		enemy_units[0].position = player_units[0].position + Vector2(48,48)
-		enemy_units[1].position = player_units[0].position + Vector2(48,48)
 
 	if event is InputEventMouseButton:
 		match current_state:

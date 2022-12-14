@@ -1,24 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/world/level.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/world/bunker_tile_set.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/units/player_units/pilot.tscn" type="PackedScene" id=3]
 [ext_resource path="res://code/world_logic/lvl_generator_bunker.gd" type="Script" id=4]
-[ext_resource path="res://scenes/units/NPC/Enemy/bunker/def_robot.tscn" type="PackedScene" id=5]
 
 [node name="level" instance=ExtResource( 1 )]
 lvl_type = "bunker_tile_set"
 
 [node name="unit" parent="objects/units/player" index="0" instance=ExtResource( 3 )]
-position = Vector2( 150, 126 )
-
-[node name="unit2" parent="objects/units/player" index="1" instance=ExtResource( 3 )]
-position = Vector2( 94, 117 )
-
-[node name="unit" parent="objects/units/enemy" index="0" instance=ExtResource( 5 )]
-
-[node name="unit2" parent="objects/units/enemy" index="1" instance=ExtResource( 5 )]
-position = Vector2( 56, 40 )
 
 [node name="bunker_tile_set" parent="objects" index="1" instance=ExtResource( 2 )]
 position = Vector2( 0, -1 )
