@@ -12,6 +12,7 @@ var rooms_array
 onready var CreateRooms = $create_rooms
 onready var floor_tilemap = $floor
 onready var wals_tilemap = $wals
+onready var fow_tilemap = $fogOfWar
 onready var astar_navigation_tilemap = $astar_nav_mesh
 onready var rooms_node = $floor/rooms
 
@@ -44,12 +45,16 @@ func _BSP():
 			var t = 0
 			if floor_tilemap.get_cell(x*2, y*2) == 0:
 				t+=1
+				fow_tilemap.set_cell(x*2,y*2,0)
 			if floor_tilemap.get_cell(x*2+1, y*2) == 0:
 				t+=1
+				fow_tilemap.set_cell(x*2+1, y*2, 0)
 			if floor_tilemap.get_cell(x*2, y*2+1) == 0:
 				t+=1
+				fow_tilemap.set_cell(x*2, y*2+1, 0)
 			if floor_tilemap.get_cell(x*2+1, y*2+1) == 0:
 				t+=1
+				fow_tilemap.set_cell(x*2+1, y*2+1, 0)
 			if t>=3:
 				astar_navigation_tilemap.set_cell(x,y,0)
 			if (floor_tilemap.get_cell(x-50,y-50)==-1):
@@ -76,13 +81,23 @@ func drawBSP(room):
 func placeStart():
 	rooms_array = rooms_node.get_children()
 	startRoom = rooms_array[rng.randi_range(0,rooms_array.size())]
-	
+	yield(get_tree().create_timer(2), "timeout")
+	var player= get_parent().get_parent().get_current_unit()
+	var calculated_position= floor_tilemap.map_to_world(startRoom.mapPosition)
+	calculated_position.x+=8
+	calculated_position.y+=8
+	player.position = calculated_position
+	for x in range (-4,5):
+		for y in range (-4,5):
+			print(startRoom.mapPosition)
+			fow_tilemap.set_cell(startRoom.mapPosition.x+x,startRoom.mapPosition.y+y, -1)
 
 func _ready():
 	_BSP()
 
 func get_prefabs():
 	return prefabs
+
 
 
 func _on_create_rooms_generation_complete():
