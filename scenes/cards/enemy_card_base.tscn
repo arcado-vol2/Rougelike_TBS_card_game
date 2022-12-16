@@ -4,7 +4,7 @@
 [ext_resource path="res://texture/cards/enemy_card_base.png" type="Texture" id=2]
 [ext_resource path="res://texture/fonts/main_font_godot_file.tres" type="DynamicFont" id=3]
 
-[node name="Node2D" type="Node2D"]
+[node name="enemy_card_base" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( -1, -2 )
