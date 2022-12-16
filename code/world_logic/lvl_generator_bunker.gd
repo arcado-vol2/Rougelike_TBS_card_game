@@ -15,7 +15,7 @@ onready var wals_tilemap = $wals
 onready var fow_tilemap = $fogOfWar
 onready var astar_navigation_tilemap = $astar_nav_mesh
 onready var rooms_node = $floor/rooms
-
+signal loading_complete
 func _createRooms():
 	CreateRooms.setRooms(rooms_node)
 	CreateRooms.setMap(floor_tilemap, astar_navigation_tilemap)
@@ -54,3 +54,4 @@ func get_prefabs():
 func _on_create_rooms_generation_complete():
 	placeStart()
 	get_parent().get_parent().start()
+	emit_signal("loading_complete")

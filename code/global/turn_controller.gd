@@ -23,7 +23,7 @@ var stage = null
 var current_player_unit = null
 var current_enemys= null
 
-var phase = wandering
+var phase = null
 var initiative_deck = []
 
 var enemys = []
@@ -33,7 +33,16 @@ var players = []
 func _ready():
 	rng.randomize()
 
-	
+func change_phase(ph):
+	match ph:
+		wandering:
+			if phase != ph:
+				hand_controller.hide_a_hand()
+		battle:
+			if phase != ph:
+				hand_controller.show_a_hand()
+
+
 func get_possible_enemys():
 	#тут надо добавить обращение к туману войны и комнатам, что for шёл не по всем, а только по нужным
 	var keys = []

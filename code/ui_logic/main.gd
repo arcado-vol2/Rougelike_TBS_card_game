@@ -37,6 +37,7 @@ func _ready():
 	set_physics_process(false)
 	hand_center = Vector2(hand_node.get_rect().size.x/2, 0)
 	center_card_y = 0
+	ap = get_node("AnimationPlayer")
 	radius = (hand_node.get_rect().size.x * sin((PI - hand_angle)/2))/sin(hand_angle)
 	hand_center.y = - sqrt(pow(radius,2) - pow(hand_center.x,2))
 	max_y = max(sqrt(pow(radius,2)) + hand_center.y, -sqrt(pow(radius,2)) + hand_center.y)
@@ -154,9 +155,18 @@ func fold_a_hand():
 		card.set_target_pos(Vector2(center,10))
 
 func hide_a_hand():
+	print(ap)
 	ap.play("hide_hand")
 
 func show_a_hand():
 	ap.play("show_hand")
 
 
+
+
+func _on_bunker_tile_set_loading_complete():
+	$loading_screen.queue_free()
+
+
+func _on_cave_tile_set_loading_complete():
+	$loading_screen.queue_free()

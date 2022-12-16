@@ -16,6 +16,8 @@ onready var fow_tilemap = $fogOfWar
 onready var astar_navigation_tilemap = $astar_nav_mesh
 onready var rooms_node = $floor/rooms
 
+signal loading_complete
+
 func _BSP():
 	rng.randomize()
 	var curvedLine = CurvedLine_script.new()
@@ -103,3 +105,9 @@ func get_prefabs():
 func _on_create_rooms_generation_complete():
 	placeStart()
 	get_parent().get_parent().start()
+	$Timer.start()
+	
+
+
+func _on_Timer_timeout():
+	emit_signal("loading_complete")

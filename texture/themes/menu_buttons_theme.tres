@@ -1,0 +1,39 @@
+[gd_resource type="Theme" load_steps=6 format=2]
+
+[ext_resource path="res://texture/fonts/main_font_godot_file.tres" type="DynamicFont" id=1]
+
+[sub_resource type="StyleBoxFlat" id=3]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id=4]
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+expand_margin_top = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.247059, 0.223529, 0.321569, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.5, 0.5, 0.5, 1 )
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+expand_margin_top = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.37, 0.37, 0.37, 1 )
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[resource]
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/fonts/font = ExtResource( 1 )
+Button/styles/focus = SubResource( 3 )
+Button/styles/hover = SubResource( 4 )
+Button/styles/normal = SubResource( 5 )
+Button/styles/pressed = SubResource( 6 )

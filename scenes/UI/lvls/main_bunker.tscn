@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://code/UI_logic/main.gd" type="Script" id=1]
 [ext_resource path="res://code/UI_logic/hand.gd" type="Script" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://scenes/UI/queue_text.tscn" type="PackedScene" id=5]
 [ext_resource path="res://texture/fonts/main_font_godot_file.tres" type="DynamicFont" id=6]
 [ext_resource path="res://code/global/turn_controller.gd" type="Script" id=7]
+[ext_resource path="res://scenes/units/NPC/Enemy/cave/worm.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/units/NPC/Enemy/bunker/sentry.tscn" type="PackedScene" id=9]
+[ext_resource path="res://texture/UI/loading.png" type="Texture" id=10]
 
 [sub_resource type="Animation" id=11]
 resource_name = "hide_queue"
@@ -82,7 +85,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -150, 371 ) ]
+"values": [ Vector2( -38, 371 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("hand:rect_position")
@@ -94,7 +97,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 203, 800 ) ]
+"values": [ Vector2( 203, 456 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("hand_substrate:rect_position")
@@ -311,6 +314,86 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 600 ), Vector2( 0, 512 ) ]
 }
 
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 10 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 10 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 10 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 10 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 10 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 10 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 10 )
+region = Rect2( 224, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 10 )
+region = Rect2( 256, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 10 )
+region = Rect2( 288, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 10 )
+region = Rect2( 320, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 10 )
+region = Rect2( 352, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 10 )
+region = Rect2( 384, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 10 )
+region = Rect2( 416, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 10 )
+region = Rect2( 448, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 10 )
+region = Rect2( 480, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 10 )
+region = Rect2( 512, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 10 )
+region = Rect2( 544, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=38]
+animations = [ {
+"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
+"loop": true,
+"name": "default",
+"speed": 12.0
+} ]
+
 [node name="main" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -326,7 +409,13 @@ render_target_update_mode = 3
 
 [node name="level" parent="ViewportContainer/Viewport" instance=ExtResource( 4 )]
 
-[node name="unit" parent="ViewportContainer/Viewport/level/objects/units/player" index="0"]
+[node name="unit2" parent="ViewportContainer/Viewport/level/objects/units/player" index="0" instance=ExtResource( 8 )]
+tile_set_type = "bunker_tile_set"
+
+[node name="unit3" parent="ViewportContainer/Viewport/level/objects/units/player" index="1" instance=ExtResource( 9 )]
+tile_set_type = "bunker_tile_set"
+
+[node name="unit" parent="ViewportContainer/Viewport/level/objects/units/player" index="2"]
 tile_set_type = "bunker_tile_set"
 
 [node name="turn_controller" type="Node" parent="ViewportContainer/Viewport"]
@@ -338,9 +427,9 @@ margin_bottom = 20.0
 text = "draw a card"
 
 [node name="hand_substrate" type="ColorRect" parent="."]
-margin_top = 600.0
+margin_top = 468.0
 margin_right = 960.0
-margin_bottom = 672.0
+margin_bottom = 540.0
 color = Color( 0.168627, 0.192157, 0.25098, 0.584314 )
 
 [node name="turn" type="ColorRect" parent="hand_substrate"]
@@ -392,18 +481,18 @@ text = "next event"
 
 [node name="hand" type="Control" parent="."]
 margin_left = 203.0
-margin_top = 800.0
+margin_top = 456.0
 margin_right = 779.0
-margin_bottom = 840.0
+margin_bottom = 496.0
 rect_pivot_offset = Vector2( 288, 0 )
 script = ExtResource( 2 )
 dead_zone = -178
 
 [node name="card_type" type="ColorRect" parent="."]
 anchor_right = 2.0
-margin_left = -150.0
+margin_left = -38.0
 margin_top = 371.0
-margin_right = -45.0
+margin_right = 67.0
 margin_bottom = 428.0
 color = Color( 0.129412, 0.152941, 0.168627, 1 )
 
@@ -430,8 +519,22 @@ anims/prev = SubResource( 5 )
 anims/show_hand = SubResource( 7 )
 anims/show_queue = SubResource( 9 )
 
+[node name="loading_screen" type="ColorRect" parent="."]
+margin_left = -23.0
+margin_top = -37.0
+margin_right = 977.0
+margin_bottom = 593.0
+color = Color( 0.0352941, 0.0156863, 0.0745098, 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="loading_screen"]
+position = Vector2( 921, 514 )
+scale = Vector2( 3, 3 )
+frames = SubResource( 38 )
+frame = 11
+playing = true
+
+[connection signal="loading_complete" from="ViewportContainer/Viewport/level/objects/bunker_tile_set" to="." method="_on_bunker_tile_set_loading_complete"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="action_queue/skip" to="ViewportContainer/Viewport/level" method="_on_skip_pressed"]
 
 [editable path="ViewportContainer/Viewport/level"]
 [editable path="ViewportContainer/Viewport/level/objects/bunker_tile_set"]
